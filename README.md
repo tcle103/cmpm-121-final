@@ -26,6 +26,4 @@ Overall, the four main disciplines all need to be associated with the name of sp
 
 Give us a short section on your outlook on the project. You might cover one or more of these topics:
 
-    What is your team hoping to accomplish that other teams might not attempt?
-    What do you anticipate being the hardest or riskiest part of the project?
-    What are you hoping to learn by approaching the project with the tools and materials you selected above?
+    The plan for the project is to make a 3-dimensional slingshot game (in which the goal is still undecided). We are hoping to learn collaboration and how to better use three.js. We anticipate that the hardest part of the project will likely be learning how to use the libraries that we are unfamiliar with, as well as creating satisfying physics. 
