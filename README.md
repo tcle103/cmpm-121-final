@@ -14,16 +14,10 @@ If your team has more than four people, you are welcome to sub-divide the roles 
 
 Overall, the four main disciplines all need to be associated with the name of specific people on your team.
 ## Tools and materials
-
-With about one paragraph each (ideally including clickable hyperlinks
-
-Links to an external site.)...
-
-    Engine: Tell us about what engines, libraries, frameworks, and or platforms you intend to use, and give us a tiny bit of detail about why your team chose those. You are not committing to use this engine to finish the project, just sharing your initial thinking on engine choice. IMPORTANT: In order to satisfy the F1 Requirements, you'll need to choose something that doesn't already support high-level 3D rendering and physics (it must be something that requires you to bring those features in for yourself). If you don't know what to use, "the baseline web browser platform" is a good default choice.
-    Language: Tell us programming languages (e.g. TypeScript) and data languages (e.g. JSON) you team expects to use and why you chose them. Presumably you’ll just be using the languages expected by your previously chosen engine/platform.
-    Tools: Tell us about which tools you expect to use in the process of authoring your project. You might name the IDE for writing code, the image editor for creating visual assets, or the 3D editor you will use for building your scene. Again, briefly tell us why you made these choices. Maybe one of your teammates feels especially skilled in that tool or it represents something you all want to learn about.
-    Generative AI: Tell us about your team's plan for using (or not using) tools based on generative AI, whether they are agentic or not. For example, will you be requiring team members to use or not use specific features of specific tools? Perhaps you plan use the autocomplete features in Github Copilot but not the agent mode. Maybe you will only use the agent mode under specific instructions for it to not make any direct modifications to your code, only giving the developer advice on how to proceed.
-
+- **Engine** - We are intending to use the [baseline web platform](https://web.dev/baseline) with the [three.js](https://threejs.org/) library for 3D rendering support and the [ammo.js](https://github.com/kripken/ammo.js) library for physics. These libraries are very well-documented, as well as having demonstrated compatibility with each other. Ammo.js also appears to have built-in, high-level specifications very similar to Unity, a platform we are all reasonably experienced in; this would allow us to get to development quicker than working in something lower level like p5.
+- **Language** - We are planning to use TypeScript for our main programming language and JSON for our data language, where applicable. We've been using them throughout this class, and they are compatible with our engine/libraries discussed above.
+- **Tools** - We will likely use VSCode (either in Codespaces or local, depending on our individual set-ups) as our IDE, Blender for any major 3D mesh manipulation/creation, and GitHub for version control. This is primarily because we are comfortable using these tools, and because they are free and readily available to us.
+- **Gen. AI** - Gen. AI use is left to individual discretion; the degree to which these are used or whether they are agentic or not will also be up to each individual team member. We believe that we can each judge best how gen. AI can assist us.
 ## Outlook
 
 Give us a short section on your outlook on the project. You might cover one or more of these topics:
