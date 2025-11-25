@@ -77,7 +77,6 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-
 const speed = 0.1;
 
 function animate() {
