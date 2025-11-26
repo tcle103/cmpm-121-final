@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls.js";
+import * as _AMMO from "../ammo/ammo.js";
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x87ceeb);
