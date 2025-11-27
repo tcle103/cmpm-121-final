@@ -3,6 +3,16 @@ import { PointerLockControls } from "three/examples/jsm/controls/PointerLockCont
 
 import { Ammo } from "@fred3d/ammo";
 
+console.log(PointerLockControls);
+
+const camera = new THREE.PerspectiveCamera(
+  75,
+  globalThis.innerWidth / globalThis.innerHeight,
+  0.1,
+  1000,
+);
+camera.position.set(0, 1.8, 5);
+
 Ammo().then((Ammo) => {
   let physicsWorld;
   const rigidBodies = [];
@@ -32,7 +42,7 @@ Ammo().then((Ammo) => {
     physicsWorld.setGravity(new Ammo.btVector3(0, -9.82, 0));
   }
 
-  let scene, camera, renderer;
+  let scene, renderer;
   let holdPoint; // The invisible pickup point
   let heldBody = null;
 
@@ -44,13 +54,13 @@ Ammo().then((Ammo) => {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x87ceeb);
 
-    camera = new THREE.PerspectiveCamera(
-      75,
-      globalThis.innerWidth / globalThis.innerHeight,
-      0.1,
-      1000,
-    );
-    camera.position.set(0, 1.8, 5);
+    // camera = new THREE.PerspectiveCamera(
+    //   75,
+    //   globalThis.innerWidth / globalThis.innerHeight,
+    //   0.1,
+    //   1000,
+    // );
+    // camera.position.set(0, 1.8, 5);
 
     holdPoint = new THREE.Object3D();
     holdPoint.position.set(0, 0, -2);
