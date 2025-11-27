@@ -4,17 +4,17 @@
 
 Either organizing by person or by role, tell us who will do what on your team. Your team should span at least the following four roles:
 
-* Tools Lead: **Tien Le** 
-This person will research alternative tools, identify good ones, and help every other team member set them up on their own machine in the best configuration for your project. This person might also establish your team’s coding style guidelines and help peers setup auto-formatting systems. This person should provide support for systems like source control and automated deployment (if appropriate to your team’s approach).
+- Tools Lead: **Tien Le**
+  This person will research alternative tools, identify good ones, and help every other team member set them up on their own machine in the best configuration for your project. This person might also establish your team’s coding style guidelines and help peers setup auto-formatting systems. This person should provide support for systems like source control and automated deployment (if appropriate to your team’s approach).
 
-* Engine Lead: **Tien Le** 
-This person will research alternative engines, get buy-in from teammates on the choice, and teach peers how to use it if it is new to them. This might involve making small code examples outside of the main game project to teach others. The Engine Lead should also establish standards for which kinds of code should be organized into which folders of the project. They should try to propose software designs that insulate the rest of the team from many details of the underlying engine.
+- Engine Lead: **Tien Le**
+  This person will research alternative engines, get buy-in from teammates on the choice, and teach peers how to use it if it is new to them. This might involve making small code examples outside of the main game project to teach others. The Engine Lead should also establish standards for which kinds of code should be organized into which folders of the project. They should try to propose software designs that insulate the rest of the team from many details of the underlying engine.
 
-* Design Lead **Samuel Rex Spivey**: 
-This person will be responsible for setting the creative direction of the project, and establishing the look and feel of the game. They might make small art or code samples for others to help them contribute and maintain game content. Where the project might involve a domain-specific language, the Design Lead (who is still an engineer in this class) will lead the discussion as to what primitive elements the language needs to provide.
+- Design Lead **Samuel Rex Spivey**:
+  This person will be responsible for setting the creative direction of the project, and establishing the look and feel of the game. They might make small art or code samples for others to help them contribute and maintain game content. Where the project might involve a domain-specific language, the Design Lead (who is still an engineer in this class) will lead the discussion as to what primitive elements the language needs to provide.
 
-* Testing Lead: **Cameron Coleman** 
-This person will be responsible for both any automated testing that happens within the codebase as well as organizing and reporting on human playtests beyond the team.
+- Testing Lead: **Cameron Coleman**
+  This person will be responsible for both any automated testing that happens within the codebase as well as organizing and reporting on human playtests beyond the team.
 
 If your team has fewer than four people, some people will need to be the lead for multiple disciplines, but no person should be the lead for more than two disciplines.
 
