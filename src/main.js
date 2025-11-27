@@ -221,6 +221,7 @@ Ammo().then((Ammo) => {
 
     const mesh = hits[0].object;
     heldBody = mesh.userData.physicsBody;
+    console.log(heldBody);
     // isHolding = true;
   }
 
@@ -295,6 +296,24 @@ Ammo().then((Ammo) => {
     div.style.padding = "20px 40px";
     document.body.appendChild(div);
   }
+
+  const onKeyDown = function (event) {
+    switch (event.code) {
+      case "KeyW":
+        controls.moveForward(0.25);
+        break;
+      case "KeyA":
+        controls.moveRight(-0.25);
+        break;
+      case "KeyS":
+        controls.moveForward(-0.25);
+        break;
+      case "KeyD":
+        controls.moveRight(0.25);
+        break;
+    }
+  };
+  document.addEventListener("keydown", onKeyDown, false);
 
   init();
 });
