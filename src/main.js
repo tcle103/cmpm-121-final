@@ -221,7 +221,7 @@ Ammo().then((Ammo) => {
 
     const mesh = hits[0].object;
     heldBody = mesh.userData.physicsBody;
-    isHolding = true;
+    // isHolding = true;
   }
 
   function dropObject() {
