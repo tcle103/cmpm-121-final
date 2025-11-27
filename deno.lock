@@ -1,10 +1,11 @@
 {
   "version": "5",
   "specifiers": {
-    "npm:ammo@^3.0.3": "3.0.3",
+    "npm:@fred3d/ammo@1": "1.0.0",
     "npm:three@~0.181.2": "0.181.2",
     "npm:vite@4.4.5": "4.4.5",
-    "npm:vite@^7.2.4": "7.2.4_picomatch@4.0.3"
+    "npm:vite@7": "7.2.4_picomatch@4.0.3",
+    "npm:vite@7.2.4": "7.2.4_picomatch@4.0.3"
   },
   "npm": {
     "@esbuild/aix-ppc64@0.25.12": {
@@ -247,6 +248,9 @@
       "os": ["win32"],
       "cpu": ["x64"]
     },
+    "@fred3d/ammo@1.0.0": {
+      "integrity": "sha512-1fwb3fTj9son3Tfl5EO2emCt051pisC7vBkVYrlfSSIK4smD7ZyqY1pwgN8I2aXh0KAKWOEzaVtYyfbu+qfNWQ=="
+    },
     "@rollup/rollup-android-arm-eabi@4.53.3": {
       "integrity": "sha512-mRSi+4cBjrRLoaal2PnqH82Wqyb+d3HsPUN/W+WslCXsZsyHa9ZeQQX/pQsZaVIWDkPcpV6jJ+3KLbTbgnwv8w==",
       "os": ["android"],
@@ -360,13 +364,6 @@
     "@types/estree@1.0.8": {
       "integrity": "sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w=="
     },
-    "ammo@3.0.3": {
-      "integrity": "sha512-vo76VJ44MkUBZL/BzpGXaKzMfroF4ZR6+haRuw9p+eSWfoNaH2AxVc8xmiEPC08jhzJSeM6w7/iMUGet8b4oBQ==",
-      "dependencies": [
-        "hoek"
-      ],
-      "deprecated": true
-    },
     "esbuild@0.18.20": {
       "integrity": "sha512-ceqxoedUrcayh7Y7ZX6NdbbDzGROiyVBgC4PriJThBKSVPWnnFHZAkfI1lJT8QFkOwH4qOS2SJkS4wvpGl8BpA==",
       "optionalDependencies": [
@@ -442,10 +439,6 @@
       "integrity": "sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==",
       "os": ["darwin"],
       "scripts": true
-    },
-    "hoek@6.1.3": {
-      "integrity": "sha512-YXXAAhmF9zpQbC7LEcREFtXfGq5K1fmd+4PHkBq8NUqmzW3G+Dq10bI/i0KucLRwss3YYFQ0fSfoxBZYiGUqtQ==",
-      "deprecated": true
     },
     "nanoid@3.3.11": {
       "integrity": "sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==",
@@ -547,14 +540,9 @@
   },
   "workspace": {
     "dependencies": [
-      "npm:vite@4.4.5"
-    ],
-    "packageJson": {
-      "dependencies": [
-        "npm:ammo@^3.0.3",
-        "npm:three@~0.181.2",
-        "npm:vite@^7.2.4"
-      ]
-    }
+      "npm:@fred3d/ammo@1",
+      "npm:three@~0.181.2",
+      "npm:vite@7.2.4"
+    ]
   }
 }
