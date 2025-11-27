@@ -1,8 +1,4 @@
-import {
-  Controls,
-  Euler,
-  Vector3
-} from "./chunk-5JA7DBQ7.js";
+import { Controls, Euler, Vector3 } from "./chunk-5JA7DBQ7.js";
 import "./chunk-VUNV25KB.js";
 
 // node_modules/.deno/three@0.181.2/node_modules/three/examples/jsm/controls/PointerLockControls.js
@@ -35,14 +31,32 @@ var PointerLockControls = class extends Controls {
   }
   connect(element) {
     super.connect(element);
-    this.domElement.ownerDocument.addEventListener("mousemove", this._onMouseMove);
-    this.domElement.ownerDocument.addEventListener("pointerlockchange", this._onPointerlockChange);
-    this.domElement.ownerDocument.addEventListener("pointerlockerror", this._onPointerlockError);
+    this.domElement.ownerDocument.addEventListener(
+      "mousemove",
+      this._onMouseMove,
+    );
+    this.domElement.ownerDocument.addEventListener(
+      "pointerlockchange",
+      this._onPointerlockChange,
+    );
+    this.domElement.ownerDocument.addEventListener(
+      "pointerlockerror",
+      this._onPointerlockError,
+    );
   }
   disconnect() {
-    this.domElement.ownerDocument.removeEventListener("mousemove", this._onMouseMove);
-    this.domElement.ownerDocument.removeEventListener("pointerlockchange", this._onPointerlockChange);
-    this.domElement.ownerDocument.removeEventListener("pointerlockerror", this._onPointerlockError);
+    this.domElement.ownerDocument.removeEventListener(
+      "mousemove",
+      this._onMouseMove,
+    );
+    this.domElement.ownerDocument.removeEventListener(
+      "pointerlockchange",
+      this._onPointerlockChange,
+    );
+    this.domElement.ownerDocument.removeEventListener(
+      "pointerlockerror",
+      this._onPointerlockError,
+    );
   }
   dispose() {
     this.disconnect();
@@ -87,7 +101,7 @@ var PointerLockControls = class extends Controls {
    */
   lock(unadjustedMovement = false) {
     this.domElement.requestPointerLock({
-      unadjustedMovement
+      unadjustedMovement,
     });
   }
   /**
@@ -103,7 +117,10 @@ function onMouseMove(event) {
   _euler.setFromQuaternion(camera.quaternion);
   _euler.y -= event.movementX * _MOUSE_SENSITIVITY * this.pointerSpeed;
   _euler.x -= event.movementY * _MOUSE_SENSITIVITY * this.pointerSpeed;
-  _euler.x = Math.max(_PI_2 - this.maxPolarAngle, Math.min(_PI_2 - this.minPolarAngle, _euler.x));
+  _euler.x = Math.max(
+    _PI_2 - this.maxPolarAngle,
+    Math.min(_PI_2 - this.minPolarAngle, _euler.x),
+  );
   camera.quaternion.setFromEuler(_euler);
   this.dispatchEvent(_changeEvent);
 }
@@ -119,7 +136,5 @@ function onPointerlockChange() {
 function onPointerlockError() {
   console.error("THREE.PointerLockControls: Unable to use Pointer Lock API");
 }
-export {
-  PointerLockControls
-};
+export { PointerLockControls };
 //# sourceMappingURL=three_examples_jsm_controls_PointerLockControls__js.js.map

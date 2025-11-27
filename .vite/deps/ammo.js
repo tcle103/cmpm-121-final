@@ -1,52 +1,72 @@
-import {
-  require_stream
-} from "./chunk-UAIQTZ7I.js";
-import {
-  __commonJS
-} from "./chunk-VUNV25KB.js";
+import { require_stream } from "./chunk-UAIQTZ7I.js";
+import { __commonJS } from "./chunk-VUNV25KB.js";
 
 // browser-external:assert
 var require_assert = __commonJS({
   "browser-external:assert"(exports, module) {
-    module.exports = Object.create(new Proxy({}, {
-      get(_, key) {
-        if (key !== "__esModule" && key !== "__proto__" && key !== "constructor" && key !== "splice") {
-          console.warn(`Module "assert" has been externalized for browser compatibility. Cannot access "assert.${key}" in client code. See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.`);
-        }
-      }
-    }));
-  }
+    module.exports = Object.create(
+      new Proxy({}, {
+        get(_, key) {
+          if (
+            key !== "__esModule" && key !== "__proto__" &&
+            key !== "constructor" && key !== "splice"
+          ) {
+            console.warn(
+              `Module "assert" has been externalized for browser compatibility. Cannot access "assert.${key}" in client code. See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.`,
+            );
+          }
+        },
+      }),
+    );
+  },
 });
 
 // browser-external:crypto
 var require_crypto = __commonJS({
   "browser-external:crypto"(exports, module) {
-    module.exports = Object.create(new Proxy({}, {
-      get(_, key) {
-        if (key !== "__esModule" && key !== "__proto__" && key !== "constructor" && key !== "splice") {
-          console.warn(`Module "crypto" has been externalized for browser compatibility. Cannot access "crypto.${key}" in client code. See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.`);
-        }
-      }
-    }));
-  }
+    module.exports = Object.create(
+      new Proxy({}, {
+        get(_, key) {
+          if (
+            key !== "__esModule" && key !== "__proto__" &&
+            key !== "constructor" && key !== "splice"
+          ) {
+            console.warn(
+              `Module "crypto" has been externalized for browser compatibility. Cannot access "crypto.${key}" in client code. See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.`,
+            );
+          }
+        },
+      }),
+    );
+  },
 });
 
 // browser-external:path
 var require_path = __commonJS({
   "browser-external:path"(exports, module) {
-    module.exports = Object.create(new Proxy({}, {
-      get(_, key) {
-        if (key !== "__esModule" && key !== "__proto__" && key !== "constructor" && key !== "splice") {
-          console.warn(`Module "path" has been externalized for browser compatibility. Cannot access "path.${key}" in client code. See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.`);
-        }
-      }
-    }));
-  }
+    module.exports = Object.create(
+      new Proxy({}, {
+        get(_, key) {
+          if (
+            key !== "__esModule" && key !== "__proto__" &&
+            key !== "constructor" && key !== "splice"
+          ) {
+            console.warn(
+              `Module "path" has been externalized for browser compatibility. Cannot access "path.${key}" in client code. See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.`,
+            );
+          }
+        },
+      }),
+    );
+  },
 });
 
 // node_modules/.deno/hoek@6.1.3/node_modules/hoek/lib/deep-equal.js
 var require_deep_equal = __commonJS({
-  "node_modules/.deno/hoek@6.1.3/node_modules/hoek/lib/deep-equal.js"(exports, module) {
+  "node_modules/.deno/hoek@6.1.3/node_modules/hoek/lib/deep-equal.js"(
+    exports,
+    module,
+  ) {
     "use strict";
     var internals = {
       arrayType: Symbol("array"),
@@ -59,7 +79,7 @@ var require_deep_equal = __commonJS({
       setType: Symbol("set"),
       weakMapType: Symbol("weak-map"),
       weakSetType: Symbol("weak-set"),
-      mismatched: Symbol("mismatched")
+      mismatched: Symbol("mismatched"),
     };
     internals.typeMap = {
       "[object Array]": internals.arrayType,
@@ -69,7 +89,7 @@ var require_deep_equal = __commonJS({
       "[object RegExp]": internals.regexType,
       "[object Set]": internals.setType,
       "[object WeakMap]": internals.weakMapType,
-      "[object WeakSet]": internals.weakSetType
+      "[object WeakSet]": internals.weakSetType,
     };
     internals.SeenEntry = class {
       constructor(obj, ref) {
@@ -80,7 +100,7 @@ var require_deep_equal = __commonJS({
         return this.obj === obj && this.ref === ref;
       }
     };
-    internals.getInternalType = function(obj) {
+    internals.getInternalType = function (obj) {
       const { typeMap, bufferType, genericType } = internals;
       if (obj instanceof Buffer) {
         return bufferType;
@@ -88,7 +108,7 @@ var require_deep_equal = __commonJS({
       const objName = Object.prototype.toString.call(obj);
       return typeMap[objName] || genericType;
     };
-    internals.getSharedType = function(obj, ref, checkPrototype) {
+    internals.getSharedType = function (obj, ref, checkPrototype) {
       if (checkPrototype) {
         if (Object.getPrototypeOf(obj) !== Object.getPrototypeOf(ref)) {
           return internals.mismatched;
@@ -101,7 +121,7 @@ var require_deep_equal = __commonJS({
       }
       return type;
     };
-    internals.valueOf = function(obj) {
+    internals.valueOf = function (obj) {
       const objValueOf = obj.valueOf;
       if (objValueOf === void 0) {
         return obj;
@@ -112,10 +132,10 @@ var require_deep_equal = __commonJS({
         return err;
       }
     };
-    internals.hasOwnEnumerableProperty = function(obj, key) {
+    internals.hasOwnEnumerableProperty = function (obj, key) {
       return Object.prototype.propertyIsEnumerable.call(obj, key);
     };
-    internals.isSetSimpleEqual = function(obj, ref) {
+    internals.isSetSimpleEqual = function (obj, ref) {
       for (const entry of obj) {
         if (!ref.has(entry)) {
           return false;
@@ -123,7 +143,13 @@ var require_deep_equal = __commonJS({
       }
       return true;
     };
-    internals.isDeepEqualObj = function(instanceType, obj, ref, options, seen) {
+    internals.isDeepEqualObj = function (
+      instanceType,
+      obj,
+      ref,
+      options,
+      seen,
+    ) {
       const { isDeepEqual, valueOf, hasOwnEnumerableProperty } = internals;
       const { keys, getOwnPropertySymbols } = Object;
       if (instanceType === internals.arrayType) {
@@ -189,7 +215,10 @@ var require_deep_equal = __commonJS({
       }
       const valueOfObj = valueOf(obj);
       const valueOfRef = valueOf(ref);
-      if (!(obj === valueOfObj && ref === valueOfRef) && !isDeepEqual(valueOfObj, valueOfRef, options, seen)) {
+      if (
+        !(obj === valueOfObj && ref === valueOfRef) &&
+        !isDeepEqual(valueOfObj, valueOfRef, options, seen)
+      ) {
         return false;
       }
       const objKeys = keys(obj);
@@ -230,7 +259,7 @@ var require_deep_equal = __commonJS({
       }
       return true;
     };
-    internals.isDeepEqual = function(obj, ref, options, seen) {
+    internals.isDeepEqual = function (obj, ref, options, seen) {
       if (obj === ref) {
         return obj !== 0 || 1 / obj === 1 / ref;
       }
@@ -241,7 +270,11 @@ var require_deep_equal = __commonJS({
       if (type !== "object" || obj === null || ref === null) {
         return obj !== obj && ref !== ref;
       }
-      const instanceType = internals.getSharedType(obj, ref, !!options.prototype);
+      const instanceType = internals.getSharedType(
+        obj,
+        ref,
+        !!options.prototype,
+      );
       switch (instanceType) {
         case internals.bufferType:
           return Buffer.prototype.equals.call(obj, ref);
@@ -257,16 +290,22 @@ var require_deep_equal = __commonJS({
       }
       seen.push(new internals.SeenEntry(obj, ref));
       try {
-        return !!internals.isDeepEqualObj(instanceType, obj, ref, options, seen);
+        return !!internals.isDeepEqualObj(
+          instanceType,
+          obj,
+          ref,
+          options,
+          seen,
+        );
       } finally {
         seen.pop();
       }
     };
-    module.exports = function(obj, ref, options) {
+    module.exports = function (obj, ref, options) {
       options = options || { prototype: true };
       return !!internals.isDeepEqual(obj, ref, options, []);
     };
-  }
+  },
 });
 
 // node_modules/.deno/hoek@6.1.3/node_modules/hoek/lib/escape.js
@@ -274,7 +313,7 @@ var require_escape = __commonJS({
   "node_modules/.deno/hoek@6.1.3/node_modules/hoek/lib/escape.js"(exports) {
     "use strict";
     var internals = {};
-    exports.escapeHtml = function(input) {
+    exports.escapeHtml = function (input) {
       if (!input) {
         return "";
       }
@@ -289,7 +328,7 @@ var require_escape = __commonJS({
       }
       return escaped;
     };
-    exports.escapeJson = function(input) {
+    exports.escapeJson = function (input) {
       if (!input) {
         return "";
       }
@@ -315,7 +354,7 @@ var require_escape = __commonJS({
         return "\\u2029";
       });
     };
-    internals.escapeHtmlChar = function(charCode) {
+    internals.escapeHtmlChar = function (charCode) {
       const namedEscape = internals.namedHtml[charCode];
       if (typeof namedEscape !== "undefined") {
         return namedEscape;
@@ -323,10 +362,11 @@ var require_escape = __commonJS({
       if (charCode >= 256) {
         return "&#" + charCode + ";";
       }
-      const hexValue = Buffer.from(String.fromCharCode(charCode), "ascii").toString("hex");
+      const hexValue = Buffer.from(String.fromCharCode(charCode), "ascii")
+        .toString("hex");
       return `&#x${hexValue};`;
     };
-    internals.isSafe = function(charCode) {
+    internals.isSafe = function (charCode) {
       return typeof internals.safeCharCodes[charCode] !== "undefined";
     };
     internals.namedHtml = {
@@ -339,26 +379,28 @@ var require_escape = __commonJS({
       "163": "&pound;",
       "164": "&curren;",
       "169": "&copy;",
-      "174": "&reg;"
+      "174": "&reg;",
     };
-    internals.safeCharCodes = (function() {
+    internals.safeCharCodes = (function () {
       const safe = {};
       for (let i = 32; i < 123; ++i) {
-        if (i >= 97 || // a-z
-        i >= 65 && i <= 90 || // A-Z
-        i >= 48 && i <= 57 || // 0-9
-        i === 32 || // space
-        i === 46 || // .
-        i === 44 || // ,
-        i === 45 || // -
-        i === 58 || // :
-        i === 95) {
+        if (
+          i >= 97 || // a-z
+          i >= 65 && i <= 90 || // A-Z
+          i >= 48 && i <= 57 || // 0-9
+          i === 32 || // space
+          i === 46 || // .
+          i === 44 || // ,
+          i === 45 || // -
+          i === 58 || // :
+          i === 95
+        ) {
           safe[i] = null;
         }
       }
       return safe;
     })();
-  }
+  },
 });
 
 // node_modules/.deno/hoek@6.1.3/node_modules/hoek/lib/index.js
@@ -372,7 +414,7 @@ var require_lib = __commonJS({
     var Escape = require_escape();
     var internals = {};
     exports.deepEqual = DeepEqual;
-    exports.clone = function(obj, options = {}, _seen = null) {
+    exports.clone = function (obj, options = {}, _seen = null) {
       if (typeof obj !== "object" || obj === null) {
         return obj;
       }
@@ -425,7 +467,7 @@ var require_lib = __commonJS({
               enumerable: descriptor ? descriptor.enumerable : true,
               writable: true,
               configurable: true,
-              value: exports.clone(obj[key], options, seen)
+              value: exports.clone(obj[key], options, seen),
             });
           }
         }
@@ -435,17 +477,28 @@ var require_lib = __commonJS({
       }
       return newObj;
     };
-    internals.keys = function(obj, options = {}) {
-      return options.symbols ? Reflect.ownKeys(obj) : Object.getOwnPropertyNames(obj);
+    internals.keys = function (obj, options = {}) {
+      return options.symbols
+        ? Reflect.ownKeys(obj)
+        : Object.getOwnPropertyNames(obj);
     };
-    exports.merge = function(target, source, isNullOverride, isMergeArrays) {
-      exports.assert(target && typeof target === "object", "Invalid target value: must be an object");
-      exports.assert(source === null || source === void 0 || typeof source === "object", "Invalid source value: must be null, undefined, or an object");
+    exports.merge = function (target, source, isNullOverride, isMergeArrays) {
+      exports.assert(
+        target && typeof target === "object",
+        "Invalid target value: must be an object",
+      );
+      exports.assert(
+        source === null || source === void 0 || typeof source === "object",
+        "Invalid source value: must be null, undefined, or an object",
+      );
       if (!source) {
         return target;
       }
       if (Array.isArray(source)) {
-        exports.assert(Array.isArray(target), "Cannot merge array onto an object");
+        exports.assert(
+          Array.isArray(target),
+          "Cannot merge array onto an object",
+        );
         if (isMergeArrays === false) {
           target.length = 0;
         }
@@ -457,12 +510,20 @@ var require_lib = __commonJS({
       const keys = internals.keys(source);
       for (let i = 0; i < keys.length; ++i) {
         const key = keys[i];
-        if (key === "__proto__" || !Object.prototype.propertyIsEnumerable.call(source, key)) {
+        if (
+          key === "__proto__" ||
+          !Object.prototype.propertyIsEnumerable.call(source, key)
+        ) {
           continue;
         }
         const value = source[key];
         if (value && typeof value === "object") {
-          if (!target[key] || typeof target[key] !== "object" || Array.isArray(target[key]) !== Array.isArray(value) || value instanceof Date || Buffer.isBuffer(value) || value instanceof RegExp) {
+          if (
+            !target[key] || typeof target[key] !== "object" ||
+            Array.isArray(target[key]) !== Array.isArray(value) ||
+            value instanceof Date || Buffer.isBuffer(value) ||
+            value instanceof RegExp
+          ) {
             target[key] = exports.clone(value);
           } else {
             exports.merge(target[key], value, isNullOverride, isMergeArrays);
@@ -477,9 +538,15 @@ var require_lib = __commonJS({
       }
       return target;
     };
-    exports.applyToDefaults = function(defaults, options, isNullOverride) {
-      exports.assert(defaults && typeof defaults === "object", "Invalid defaults value: must be an object");
-      exports.assert(!options || options === true || typeof options === "object", "Invalid options value: must be true, falsy or an object");
+    exports.applyToDefaults = function (defaults, options, isNullOverride) {
+      exports.assert(
+        defaults && typeof defaults === "object",
+        "Invalid defaults value: must be an object",
+      );
+      exports.assert(
+        !options || options === true || typeof options === "object",
+        "Invalid options value: must be true, falsy or an object",
+      );
       if (!options) {
         return null;
       }
@@ -489,7 +556,7 @@ var require_lib = __commonJS({
       }
       return exports.merge(copy, options, isNullOverride === true, false);
     };
-    exports.cloneWithShallow = function(source, keys, options) {
+    exports.cloneWithShallow = function (source, keys, options) {
       if (!source || typeof source !== "object") {
         return source;
       }
@@ -498,7 +565,7 @@ var require_lib = __commonJS({
       internals.restore(copy, source, storage);
       return copy;
     };
-    internals.store = function(source, keys) {
+    internals.store = function (source, keys) {
       const storage = /* @__PURE__ */ new Map();
       for (let i = 0; i < keys.length; ++i) {
         const key = keys[i];
@@ -510,13 +577,13 @@ var require_lib = __commonJS({
       }
       return storage;
     };
-    internals.restore = function(copy, source, storage) {
+    internals.restore = function (copy, source, storage) {
       for (const [key, value] of storage) {
         internals.reachSet(copy, key, value);
         internals.reachSet(source, key, value);
       }
     };
-    internals.reachSet = function(obj, key, value) {
+    internals.reachSet = function (obj, key, value) {
       const path = Array.isArray(key) ? key : key.split(".");
       let ref = obj;
       for (let i = 0; i < path.length; ++i) {
@@ -527,9 +594,15 @@ var require_lib = __commonJS({
         ref = ref[segment];
       }
     };
-    exports.applyToDefaultsWithShallow = function(defaults, options, keys) {
-      exports.assert(defaults && typeof defaults === "object", "Invalid defaults value: must be an object");
-      exports.assert(!options || options === true || typeof options === "object", "Invalid options value: must be true, falsy or an object");
+    exports.applyToDefaultsWithShallow = function (defaults, options, keys) {
+      exports.assert(
+        defaults && typeof defaults === "object",
+        "Invalid defaults value: must be an object",
+      );
+      exports.assert(
+        !options || options === true || typeof options === "object",
+        "Invalid options value: must be true, falsy or an object",
+      );
       exports.assert(keys && Array.isArray(keys), "Invalid keys");
       if (!options) {
         return null;
@@ -543,7 +616,7 @@ var require_lib = __commonJS({
       internals.restore(copy, options, storage);
       return copy;
     };
-    exports.intersect = function(array1, array2, justFirst) {
+    exports.intersect = function (array1, array2, justFirst) {
       if (!array1 || !array2) {
         return justFirst ? null : [];
       }
@@ -561,22 +634,30 @@ var require_lib = __commonJS({
       }
       return justFirst ? null : common;
     };
-    internals.has = function(ref, key) {
+    internals.has = function (ref, key) {
       if (typeof ref.has === "function") {
         return ref.has(key);
       }
       return ref[key] !== void 0;
     };
-    exports.contain = function(ref, values, options = {}) {
+    exports.contain = function (ref, values, options = {}) {
       let valuePairs = null;
-      if (typeof ref === "object" && typeof values === "object" && !Array.isArray(ref) && !Array.isArray(values)) {
+      if (
+        typeof ref === "object" && typeof values === "object" &&
+        !Array.isArray(ref) && !Array.isArray(values)
+      ) {
         valuePairs = values;
-        const symbols = Object.getOwnPropertySymbols(values).filter(Object.prototype.propertyIsEnumerable.bind(values));
+        const symbols = Object.getOwnPropertySymbols(values).filter(
+          Object.prototype.propertyIsEnumerable.bind(values),
+        );
         values = [...Object.keys(values), ...symbols];
       } else {
         values = [].concat(values);
       }
-      exports.assert(typeof ref === "string" || typeof ref === "object", "Reference must be string or an object");
+      exports.assert(
+        typeof ref === "string" || typeof ref === "object",
+        "Reference must be string or an object",
+      );
       exports.assert(values.length, "Values array cannot be empty");
       let compare;
       let compareFlags;
@@ -586,7 +667,7 @@ var require_lib = __commonJS({
         const hasPart = options.hasOwnProperty("part");
         compareFlags = {
           prototype: hasOnly ? options.only : hasPart ? !options.part : false,
-          part: hasOnly ? !options.only : hasPart ? options.part : false
+          part: hasOnly ? !options.only : hasPart ? options.part : false,
         };
       } else {
         compare = (a, b) => a === b;
@@ -600,7 +681,10 @@ var require_lib = __commonJS({
         let pattern = "(";
         for (let i = 0; i < values.length; ++i) {
           const value = values[i];
-          exports.assert(typeof value === "string", "Cannot compare string reference to non-string value");
+          exports.assert(
+            typeof value === "string",
+            "Cannot compare string reference to non-string value",
+          );
           pattern += (i ? "|" : "") + exports.escapeRegex(value);
         }
         const regex = new RegExp(pattern + ")", "g");
@@ -634,7 +718,9 @@ var require_lib = __commonJS({
           const key = keys[i];
           const pos = values.indexOf(key);
           if (pos !== -1) {
-            if (valuePairs && !compare(valuePairs[key], ref[key], compareFlags)) {
+            if (
+              valuePairs && !compare(valuePairs[key], ref[key], compareFlags)
+            ) {
               return false;
             }
             ++matches[pos];
@@ -657,7 +743,7 @@ var require_lib = __commonJS({
       }
       return result;
     };
-    exports.flatten = function(array, target) {
+    exports.flatten = function (array, target) {
       const result = target || [];
       for (let i = 0; i < array.length; ++i) {
         if (Array.isArray(array[i])) {
@@ -668,7 +754,7 @@ var require_lib = __commonJS({
       }
       return result;
     };
-    exports.reach = function(obj, chain, options) {
+    exports.reach = function (obj, chain, options) {
       if (chain === false || chain === null || typeof chain === "undefined") {
         return obj;
       }
@@ -677,7 +763,10 @@ var require_lib = __commonJS({
         options = { separator: options };
       }
       const isChainArray = Array.isArray(chain);
-      exports.assert(!isChainArray || !options.separator, "Separator option no valid for array-based chain");
+      exports.assert(
+        !isChainArray || !options.separator,
+        "Separator option no valid for array-based chain",
+      );
       const path = isChainArray ? chain : chain.split(options.separator || ".");
       let ref = obj;
       for (let i = 0; i < path.length; ++i) {
@@ -688,9 +777,27 @@ var require_lib = __commonJS({
             key = ref.length + number;
           }
         }
-        if (!ref || !((typeof ref === "object" || typeof ref === "function") && key in ref) || typeof ref !== "object" && options.functions === false) {
-          exports.assert(!options.strict || i + 1 === path.length, "Missing segment", key, "in reach path ", chain);
-          exports.assert(typeof ref === "object" || options.functions === true || typeof ref !== "function", "Invalid segment", key, "in reach path ", chain);
+        if (
+          !ref ||
+          !((typeof ref === "object" || typeof ref === "function") &&
+            key in ref) ||
+          typeof ref !== "object" && options.functions === false
+        ) {
+          exports.assert(
+            !options.strict || i + 1 === path.length,
+            "Missing segment",
+            key,
+            "in reach path ",
+            chain,
+          );
+          exports.assert(
+            typeof ref === "object" || options.functions === true ||
+              typeof ref !== "function",
+            "Invalid segment",
+            key,
+            "in reach path ",
+            chain,
+          );
           ref = options.default;
           break;
         }
@@ -698,13 +805,13 @@ var require_lib = __commonJS({
       }
       return ref;
     };
-    exports.reachTemplate = function(obj, template, options) {
+    exports.reachTemplate = function (obj, template, options) {
       return template.replace(/{([^}]+)}/g, ($0, chain) => {
         const value = exports.reach(obj, chain, options);
         return value === void 0 || value === null ? "" : value;
       });
     };
-    exports.assert = function(condition, ...args) {
+    exports.assert = function (condition, ...args) {
       if (condition) {
         return;
       }
@@ -712,49 +819,61 @@ var require_lib = __commonJS({
         throw args[0];
       }
       const msgs = args.filter((arg) => arg !== "").map((arg) => {
-        return typeof arg === "string" ? arg : arg instanceof Error ? arg.message : exports.stringify(arg);
+        return typeof arg === "string"
+          ? arg
+          : arg instanceof Error
+          ? arg.message
+          : exports.stringify(arg);
       });
       throw new Assert.AssertionError({
         message: msgs.join(" ") || "Unknown error",
         actual: false,
         expected: true,
         operator: "==",
-        stackStartFunction: exports.assert
+        stackStartFunction: exports.assert,
       });
     };
-    exports.Bench = function() {
+    exports.Bench = function () {
       this.ts = 0;
       this.reset();
     };
-    exports.Bench.prototype.reset = function() {
+    exports.Bench.prototype.reset = function () {
       this.ts = exports.Bench.now();
     };
-    exports.Bench.prototype.elapsed = function() {
+    exports.Bench.prototype.elapsed = function () {
       return exports.Bench.now() - this.ts;
     };
-    exports.Bench.now = function() {
+    exports.Bench.now = function () {
       const ts = process.hrtime();
       return ts[0] * 1e3 + ts[1] / 1e6;
     };
-    exports.escapeRegex = function(string) {
-      return string.replace(/[\^\$\.\*\+\-\?\=\!\:\|\\\/\(\)\[\]\{\}\,]/g, "\\$&");
+    exports.escapeRegex = function (string) {
+      return string.replace(
+        /[\^\$\.\*\+\-\?\=\!\:\|\\\/\(\)\[\]\{\}\,]/g,
+        "\\$&",
+      );
     };
-    exports.escapeHeaderAttribute = function(attribute) {
-      exports.assert(/^[ \w\!#\$%&'\(\)\*\+,\-\.\/\:;<\=>\?@\[\]\^`\{\|\}~\"\\]*$/.test(attribute), "Bad attribute value (" + attribute + ")");
+    exports.escapeHeaderAttribute = function (attribute) {
+      exports.assert(
+        /^[ \w\!#\$%&'\(\)\*\+,\-\.\/\:;<\=>\?@\[\]\^`\{\|\}~\"\\]*$/.test(
+          attribute,
+        ),
+        "Bad attribute value (" + attribute + ")",
+      );
       return attribute.replace(/\\/g, "\\\\").replace(/\"/g, '\\"');
     };
-    exports.escapeHtml = function(string) {
+    exports.escapeHtml = function (string) {
       return Escape.escapeHtml(string);
     };
-    exports.escapeJson = function(string) {
+    exports.escapeJson = function (string) {
       return Escape.escapeJson(string);
     };
-    exports.once = function(method) {
+    exports.once = function (method) {
       if (method._hoekOnce) {
         return method;
       }
       let once = false;
-      const wrapped = function(...args) {
+      const wrapped = function (...args) {
         if (!once) {
           once = true;
           method(...args);
@@ -763,32 +882,35 @@ var require_lib = __commonJS({
       wrapped._hoekOnce = true;
       return wrapped;
     };
-    exports.ignore = function() {
+    exports.ignore = function () {
     };
-    exports.uniqueFilename = function(path, extension) {
+    exports.uniqueFilename = function (path, extension) {
       if (extension) {
         extension = extension[0] !== "." ? "." + extension : extension;
       } else {
         extension = "";
       }
       path = Path.resolve(path);
-      const name = [Date.now(), process.pid, Crypto.randomBytes(8).toString("hex")].join("-") + extension;
+      const name =
+        [Date.now(), process.pid, Crypto.randomBytes(8).toString("hex")].join(
+          "-",
+        ) + extension;
       return Path.join(path, name);
     };
-    exports.stringify = function(...args) {
+    exports.stringify = function (...args) {
       try {
         return JSON.stringify.apply(null, args);
       } catch (err) {
         return "[Cannot display object: " + err.message + "]";
       }
     };
-    exports.wait = function(timeout) {
+    exports.wait = function (timeout) {
       return new Promise((resolve) => setTimeout(resolve, timeout));
     };
-    exports.block = function() {
+    exports.block = function () {
       return new Promise(exports.ignore);
     };
-  }
+  },
 });
 
 // node_modules/.deno/ammo@3.0.3/node_modules/ammo/lib/index.js
@@ -803,7 +925,7 @@ var require_lib2 = __commonJS({
         this.to = to;
       }
     };
-    exports.header = function(header, length) {
+    exports.header = function (header, length) {
       const parts = header.split("=");
       if (parts.length !== 2 || parts[0] !== "bytes") {
         return null;
@@ -862,12 +984,27 @@ var require_lib2 = __commonJS({
         if (!(range instanceof internals.Range)) {
           Hoek.assert(typeof range === "object", 'Expected "range" object');
           const from = range.from || 0;
-          Hoek.assert(typeof from === "number", '"range.from" must be falsy, or a number');
-          Hoek.assert(from === parseInt(from, 10) && from >= 0, '"range.from" must be a positive integer');
+          Hoek.assert(
+            typeof from === "number",
+            '"range.from" must be falsy, or a number',
+          );
+          Hoek.assert(
+            from === parseInt(from, 10) && from >= 0,
+            '"range.from" must be a positive integer',
+          );
           const to = range.to || 0;
-          Hoek.assert(typeof to === "number", '"range.to" must be falsy, or a number');
-          Hoek.assert(to === parseInt(to, 10) && to >= 0, '"range.to" must be a positive integer');
-          Hoek.assert(to >= from, '"range.to" must be greater than or equal to "range.from"');
+          Hoek.assert(
+            typeof to === "number",
+            '"range.to" must be falsy, or a number',
+          );
+          Hoek.assert(
+            to === parseInt(to, 10) && to >= 0,
+            '"range.to" must be a positive integer',
+          );
+          Hoek.assert(
+            to >= from,
+            '"range.to" must be greater than or equal to "range.from"',
+          );
           range = new internals.Range(from, to);
         }
         super();
@@ -877,8 +1014,10 @@ var require_lib2 = __commonJS({
       processChunk(chunk) {
         const pos = this._next;
         this._next = this._next + chunk.length;
-        if (this._next <= this._range.from || // Before range
-        pos > this._range.to) {
+        if (
+          this._next <= this._range.from || // Before range
+          pos > this._range.to
+        ) {
           return;
         }
         const from = Math.max(0, this._range.from - pos);
@@ -894,7 +1033,7 @@ var require_lib2 = __commonJS({
         return done();
       }
     };
-  }
+  },
 });
 export default require_lib2();
 //# sourceMappingURL=ammo.js.map
