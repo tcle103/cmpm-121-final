@@ -130,37 +130,37 @@ Ammo().then((Ammo) => {
   // create cubes function
   function createCubes() {
     const rainbow = [
-        0xFF0000, // red
-        0xFF7F00, // orange
-        0xFFFF00, // yellow
-        0x00FF00, // green
-        0x0000FF, // blue
-        0x8B00FF  // violet
+      0xFF0000, // red
+      0xFF7F00, // orange
+      0xFFFF00, // yellow
+      0x00FF00, // green
+      0x0000FF, // blue
+      0x8B00FF, // violet
     ];
 
     for (let i = 0; i < rainbow.length; i++) {
-        const geo = new THREE.BoxGeometry(1, 1, 1);
-        const mat = new THREE.MeshStandardMaterial({ color: rainbow[i] });
-        const mesh = new THREE.Mesh(geo, mat);
+      const geo = new THREE.BoxGeometry(1, 1, 1);
+      const mat = new THREE.MeshStandardMaterial({ color: rainbow[i] });
+      const mesh = new THREE.Mesh(geo, mat);
 
-        mesh.position.set(
-            Math.random() * 8 - 4,
-            3,
-            Math.random() * 8 - 4
-        );
+      mesh.position.set(
+        Math.random() * 8 - 4,
+        3,
+        Math.random() * 8 - 4,
+      );
 
-        // store THE COLOR as the "shape" ID
-        mesh.userData.shape = rainbow[i];
+      // store THE COLOR as the "shape" ID
+      mesh.userData.shape = rainbow[i];
 
-        scene.add(mesh);
+      scene.add(mesh);
 
-        createRigidBody(
-            mesh,
-            new Ammo.btBoxShape(new Ammo.btVector3(0.5, 0.5, 0.5)),
-            1
-        );
+      createRigidBody(
+        mesh,
+        new Ammo.btBoxShape(new Ammo.btVector3(0.5, 0.5, 0.5)),
+        1,
+      );
 
-        rigidBodies.push(mesh);
+      rigidBodies.push(mesh);
     }
   }
 
@@ -198,32 +198,32 @@ Ammo().then((Ammo) => {
   // create puzzle holes function
   function createPuzzleHoles() {
     const rainbow = [
-        0xFF0000, // red
-        0xFF7F00, // orange
-        0xFFFF00, // yellow
-        0x00FF00, // green
-        0x0000FF, // blue
-        0x8B00FF  // violet
+      0xFF0000, // red
+      0xFF7F00, // orange
+      0xFFFF00, // yellow
+      0x00FF00, // green
+      0x0000FF, // blue
+      0x8B00FF, // violet
     ];
 
     const startX = -9;
 
     for (let i = 0; i < rainbow.length; i++) {
-        const x = startX + i * 3;
+      const x = startX + i * 3;
 
-        // ring visual
-        const ringGeo = new THREE.RingGeometry(0.6, 1, 32);
-        const ringMat = new THREE.MeshStandardMaterial({ color: rainbow[i] });
-        const ring = new THREE.Mesh(ringGeo, ringMat);
-        ring.rotation.x = -Math.PI / 2;
-        ring.position.set(x, 0.01, 0);
-        scene.add(ring);
+      // ring visual
+      const ringGeo = new THREE.RingGeometry(0.6, 1, 32);
+      const ringMat = new THREE.MeshStandardMaterial({ color: rainbow[i] });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.rotation.x = -Math.PI / 2;
+      ring.position.set(x, 0.01, 0);
+      scene.add(ring);
 
-        puzzleHoles.push({
-            position: new THREE.Vector3(x, 0.5, 0),
-            requiredShape: rainbow[i],   // MATCH BY COLOR
-            filled: false
-        });
+      puzzleHoles.push({
+        position: new THREE.Vector3(x, 0.5, 0),
+        requiredShape: rainbow[i], // MATCH BY COLOR
+        filled: false,
+      });
     }
   }
 
