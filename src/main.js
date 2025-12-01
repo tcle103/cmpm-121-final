@@ -227,4 +227,3 @@ Ammo().then((AmmoLib) => {
     if (e.key === "2") switchScene(2);
   });
 });
-
