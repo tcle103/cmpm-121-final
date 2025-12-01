@@ -127,71 +127,6 @@ Ammo().then((Ammo) => {
     physicsWorld.addRigidBody(body);
   }
 
-  // create cubes function
-  function createCubes() {
-    const rainbow = [
-      0xFF0000, // red
-      0xFF7F00, // orange
-      0xFFFF00, // yellow
-      0x00FF00, // green
-      0x0000FF, // blue
-      0x8B00FF, // violet
-    ];
-
-    for (let i = 0; i < rainbow.length; i++) {
-      const geo = new THREE.BoxGeometry(1, 1, 1);
-      const mat = new THREE.MeshStandardMaterial({ color: rainbow[i] });
-      const mesh = new THREE.Mesh(geo, mat);
-
-      mesh.position.set(
-        Math.random() * 8 - 4,
-        3,
-        Math.random() * 8 - 4,
-      );
-
-      // store THE COLOR as the "shape" ID
-      mesh.userData.shape = rainbow[i];
-
-      scene.add(mesh);
-
-      createRigidBody(
-        mesh,
-        new Ammo.btBoxShape(new Ammo.btVector3(0.5, 0.5, 0.5)),
-        1,
-      );
-
-      rigidBodies.push(mesh);
-    }
-  }
-
-  // create rigidbody function for objects
-  function createRigidBody(mesh, shape, mass) {
-    // get transform and identities of the object
-    const transform = new Ammo.btTransform();
-    transform.setIdentity();
-    transform.setOrigin(
-      new Ammo.btVector3(mesh.position.x, mesh.position.y, mesh.position.z),
-    );
-
-    // initialize physics of object
-    const motion = new Ammo.btDefaultMotionState(transform);
-    const localInertia = new Ammo.btVector3(0, 0, 0);
-
-    if (mass > 0) shape.calculateLocalInertia(mass, localInertia);
-
-    // take construction info and make the rigidbody with ammo's constructor
-    const rbInfo = new Ammo.btRigidBodyConstructionInfo(
-      mass,
-      motion,
-      shape,
-      localInertia,
-    );
-    const body = new Ammo.btRigidBody(rbInfo);
-
-    mesh.userData.physicsBody = body;
-    physicsWorld.addRigidBody(body);
-  }
-
   // puzzle holes variable
   const puzzleHoles = [];
 
@@ -246,6 +181,7 @@ Ammo().then((Ammo) => {
     if (puzzleHoles.every((h) => h.filled)) triggerWinScreen();
   }
 
+  // snap the object to the hole function
   function snapToHole(mesh, hole) {
     hole.filled = true;
 
@@ -256,6 +192,80 @@ Ammo().then((Ammo) => {
 
     mesh.position.copy(hole.position);
     mesh.rotation.set(0, 0, 0);
+  }
+
+  // helper function for spawning outside of the goals
+  function randomOutsideGoals(start, end, holesX) {
+    let x;
+    do {
+      x = Math.random() * (end - start) + start;
+    } while (holesX.some((holeX) => Math.abs(x - holeX) < 1.2));
+    return x;
+  }
+
+  const holesX = puzzleHoles.map((h) => h.position.x);
+
+  // create cubes function
+  function createCubes() {
+    const rainbow = [
+      0xFF0000, // red
+      0xFF7F00, // orange
+      0xFFFF00, // yellow
+      0x00FF00, // green
+      0x0000FF, // blue
+      0x8B00FF, // violet
+    ];
+
+    for (let i = 0; i < rainbow.length; i++) {
+      const geo = new THREE.BoxGeometry(1, 1, 1);
+      const mat = new THREE.MeshStandardMaterial({ color: rainbow[i] });
+      const mesh = new THREE.Mesh(geo, mat);
+
+      const x = randomOutsideGoals(-10, 10, holesX);
+      const z = Math.random() * 10 - 5;
+      mesh.position.set(x, 3, z);
+
+      // store THE COLOR as the "shape" ID
+      mesh.userData.shape = rainbow[i];
+
+      scene.add(mesh);
+
+      createRigidBody(
+        mesh,
+        new Ammo.btBoxShape(new Ammo.btVector3(0.5, 0.5, 0.5)),
+        1,
+      );
+
+      rigidBodies.push(mesh);
+    }
+  }
+
+  // create rigidbody function for objects
+  function createRigidBody(mesh, shape, mass) {
+    // get transform and identities of the object
+    const transform = new Ammo.btTransform();
+    transform.setIdentity();
+    transform.setOrigin(
+      new Ammo.btVector3(mesh.position.x, mesh.position.y, mesh.position.z),
+    );
+
+    // initialize physics of object
+    const motion = new Ammo.btDefaultMotionState(transform);
+    const localInertia = new Ammo.btVector3(0, 0, 0);
+
+    if (mass > 0) shape.calculateLocalInertia(mass, localInertia);
+
+    // take construction info and make the rigidbody with ammo's constructor
+    const rbInfo = new Ammo.btRigidBodyConstructionInfo(
+      mass,
+      motion,
+      shape,
+      localInertia,
+    );
+    const body = new Ammo.btRigidBody(rbInfo);
+
+    mesh.userData.physicsBody = body;
+    physicsWorld.addRigidBody(body);
   }
 
   document.addEventListener("mousedown", () => {
