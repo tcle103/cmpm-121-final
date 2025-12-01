@@ -13,26 +13,50 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.set(0, 1.8, 5);
 
-Ammo().then((Ammo) => {
-  let physicsWorld;
-  const rigidBodies = [];
-  const tmpAmmoVec = new Ammo.btVector3();
+// movement keys
+const keys = { w: false, a: false, s: false, d: false, space: false };
 
+// movement key logger events
+document.addEventListener("keydown", (e) => {
+  if (e.key.toLowerCase() in keys) keys[e.key.toLowerCase()] = true;
+});
+document.addEventListener("keyup", (e) => {
+  if (e.key.toLowerCase() in keys) keys[e.key.toLowerCase()] = false;
+});
+
+// physics runtime function
+Ammo().then((Ammo) => {
+  // physics world variable
+  let physicsWorld;
+  // array to store rigidbodies
+  const rigidBodies = [];
+
+  // ---- VARIABLES FOR HELD OBJECTS ---
+  let heldBody = null;
+  let heldMesh = null;
+  const tmpTransform = new Ammo.btTransform();
+
+  // ------ ALL TUNABLE VARIABLES ------
+  const speed = .05;
+
+  // initialize physics, scene, controls, and objects
   function init() {
     initPhysics();
     initScene();
-    //initPlayerControls();
     createPuzzleHoles();
     createCubes();
     animate();
   }
 
+  // create physics function
   function initPhysics() {
+    // initialize standard physics parameters.
     const config = new Ammo.btDefaultCollisionConfiguration();
     const dispatcher = new Ammo.btCollisionDispatcher(config);
     const broadphase = new Ammo.btDbvtBroadphase();
     const solver = new Ammo.btSequentialImpulseConstraintSolver();
 
+    // create the physics world with the parameters
     physicsWorld = new Ammo.btDiscreteDynamicsWorld(
       dispatcher,
       broadphase,
@@ -42,49 +66,49 @@ Ammo().then((Ammo) => {
     physicsWorld.setGravity(new Ammo.btVector3(0, -9.82, 0));
   }
 
+  // variables for the scene and the renderer
   let scene, renderer;
-  let holdPoint; // The invisible pickup point
-  let heldBody = null;
+  let holdPoint; // the invisible pickup point for the player
 
   // pointer lock
   const controls = new PointerLockControls(camera, document.body);
   document.addEventListener("click", () => controls.lock());
 
+  // initialize scene function
   function initScene() {
+    // create the scene and background
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x87ceeb);
 
-    // camera = new THREE.PerspectiveCamera(
-    //   75,
-    //   globalThis.innerWidth / globalThis.innerHeight,
-    //   0.1,
-    //   1000,
-    // );
-    // camera.position.set(0, 1.8, 5);
-
+    // set the hold point in comparison to the camera
     holdPoint = new THREE.Object3D();
     holdPoint.position.set(0, 0, -2);
     camera.add(holdPoint);
     scene.add(camera);
 
+    // create the renderer
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(globalThis.innerWidth, globalThis.innerHeight);
     document.body.appendChild(renderer.domElement);
 
+    // create the light
     const light = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
     scene.add(light);
 
+    // create the floor
     createFloor();
   }
 
+  // floor creation function
   function createFloor() {
+    // constants for the plane, mesh, and material
     const geo = new THREE.PlaneGeometry(200, 200);
     const mat = new THREE.MeshStandardMaterial({ color: 0x228b22 });
     const mesh = new THREE.Mesh(geo, mat);
     mesh.rotation.x = -Math.PI / 2;
     scene.add(mesh);
 
-    // Ammo physics
+    // create physics box and transform variables
     const shape = new Ammo.btBoxShape(new Ammo.btVector3(100, 0.1, 100));
     const transform = new Ammo.btTransform();
     transform.setIdentity();
@@ -92,6 +116,7 @@ Ammo().then((Ammo) => {
     const motion = new Ammo.btDefaultMotionState(transform);
     const localInertia = new Ammo.btVector3(0, 0, 0);
 
+    // initialize rigidbody using previous variables
     const rbInfo = new Ammo.btRigidBodyConstructionInfo(
       0,
       motion,
@@ -102,8 +127,11 @@ Ammo().then((Ammo) => {
     physicsWorld.addRigidBody(body);
   }
 
+  // create cubes function
   function createCubes() {
+    // for each cube, create new rigidbodies
     for (let i = 0; i < 10; i++) {
+      // variables for geometry, mesh, and materials
       const geo = new THREE.BoxGeometry(1, 1, 1);
       const mat = new THREE.MeshStandardMaterial({
         color: Math.random() * 0xffffff,
@@ -114,6 +142,7 @@ Ammo().then((Ammo) => {
 
       mesh.userData.shape = "cube";
 
+      // create rigidbody with the variables
       createRigidBody(
         mesh,
         new Ammo.btBoxShape(new Ammo.btVector3(0.5, 0.5, 0.5)),
@@ -123,18 +152,22 @@ Ammo().then((Ammo) => {
     }
   }
 
+  // create rigidbody function for objects
   function createRigidBody(mesh, shape, mass) {
+    // get transform and identities of the object
     const transform = new Ammo.btTransform();
     transform.setIdentity();
     transform.setOrigin(
       new Ammo.btVector3(mesh.position.x, mesh.position.y, mesh.position.z),
     );
 
+    // initialize physics of object
     const motion = new Ammo.btDefaultMotionState(transform);
     const localInertia = new Ammo.btVector3(0, 0, 0);
 
     if (mass > 0) shape.calculateLocalInertia(mass, localInertia);
 
+    // take construction info and make the rigidbody with ammo's constructor
     const rbInfo = new Ammo.btRigidBodyConstructionInfo(
       mass,
       motion,
@@ -147,15 +180,19 @@ Ammo().then((Ammo) => {
     physicsWorld.addRigidBody(body);
   }
 
+  // puzzle holes variable
   const puzzleHoles = [];
 
+  // create puzzle holes function
   function createPuzzleHoles() {
+    // holes x position
     const startX = -3;
 
+    // for each hole, create visuals
     for (let i = 0; i < 3; i++) {
       const x = startX + i * 3;
 
-      // Visual ring
+      // ring surrounding holes
       const ringGeo = new THREE.RingGeometry(0.6, 1, 32);
       const ringMat = new THREE.MeshStandardMaterial({ color: 0xffff00 });
       const ring = new THREE.Mesh(ringGeo, ringMat);
@@ -163,7 +200,7 @@ Ammo().then((Ammo) => {
       ring.position.set(x, 0.01, 0);
       scene.add(ring);
 
-      // Puzzle slot data
+      // puzzle slot data
       puzzleHoles.push({
         position: new THREE.Vector3(x, 0.5, 0),
         requiredShape: "cube",
@@ -172,6 +209,7 @@ Ammo().then((Ammo) => {
     }
   }
 
+  // function for detecting shapes being moved into holes
   function checkPuzzleSnaps() {
     puzzleHoles.forEach((hole) => {
       if (hole.filled) return;
@@ -211,58 +249,122 @@ Ammo().then((Ammo) => {
   });
 
   function attemptPickup() {
-    const dir = new THREE.Vector3();
-    camera.getWorldDirection(dir);
+    if (heldBody !== null) return; // already holding something
 
-    const raycaster = new THREE.Raycaster(camera.position, dir);
-    const hits = raycaster.intersectObjects(rigidBodies);
+    // taycast from camera
+    const raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
 
-    if (hits.length === 0) return;
+    // save all intersections with the raycast
+    const intersects = raycaster.intersectObjects(scene.children, true);
 
-    const mesh = hits[0].object;
-    heldBody = mesh.userData.physicsBody;
-    console.log(heldBody);
-    // isHolding = true;
+    if (intersects.length === 0) return;
+
+    // take first contact point
+    const picked = intersects[0].object;
+
+    // Find physics body
+    const body = picked.userData.physicsBody;
+    if (!body) return;
+
+    // hold object hit
+    heldMesh = picked;
+    heldBody = body;
+
+    // make object kinematic so it follows the hand
+    body.setCollisionFlags(body.getCollisionFlags() | 2); // CF_KINEMATIC_OBJECT
+    body.setActivationState(4); // DISABLE_DEACTIVATION
+
+    console.log("Picked up:", picked.name);
   }
 
+  // drop object function
   function dropObject() {
+    if (!heldBody || !heldMesh) return;
+
+    // 1. Write current mesh position/rotation into Ammo body transform
+    const transform = new Ammo.btTransform();
+    transform.setIdentity();
+    transform.setOrigin(
+      new Ammo.btVector3(
+        heldMesh.position.x,
+        heldMesh.position.y,
+        heldMesh.position.z,
+      ),
+    );
+
+    transform.setRotation(
+      new Ammo.btQuaternion(
+        heldMesh.quaternion.x,
+        heldMesh.quaternion.y,
+        heldMesh.quaternion.z,
+        heldMesh.quaternion.w,
+      ),
+    );
+
+    heldBody.setWorldTransform(transform);
+
+    // also update motionState so Ammo doesn't revert
+    const motionState = heldBody.getMotionState();
+    if (motionState) motionState.setWorldTransform(transform);
+
+    // 2. Restore dynamic physics
+    heldBody.setCollisionFlags(0); // CF_DYNAMIC
+    heldBody.setActivationState(1); // ACTIVE_TAG
+    heldBody.activate();
+
     heldBody = null;
+    heldMesh = null;
+
+    console.log("Dropped object");
   }
 
   function updateHeldObject(_delta) {
-    if (!heldBody) return;
+    if (!heldBody || !heldMesh) return;
 
-    const desired = new THREE.Vector3();
-    holdPoint.getWorldPosition(desired);
+    // position in front of camera:
+    const targetPos = camera.position.clone()
+      .add(camera.getWorldDirection(new THREE.Vector3()).multiplyScalar(2));
 
-    const body = heldBody;
-    const motionState = body.getMotionState();
+    // update physics transform
+    tmpTransform.setIdentity();
+    tmpTransform.setOrigin(
+      new Ammo.btVector3(targetPos.x, targetPos.y, targetPos.z),
+    );
 
-    if (!motionState) return;
+    // activate held object
+    heldBody.setWorldTransform(tmpTransform);
+    heldBody.activate();
 
-    const transform = new Ammo.btTransform();
-    motionState.getWorldTransform(transform);
-
-    const origin = transform.getOrigin();
-    const pos = new THREE.Vector3(origin.x(), origin.y(), origin.z());
-
-    const force = desired.clone().sub(pos).multiplyScalar(50); // pulling strength
-
-    tmpAmmoVec.setValue(force.x, force.y, force.z);
-    body.applyCentralForce(tmpAmmoVec);
+    // update mesh to match physics
+    heldMesh.position.copy(targetPos);
+    heldMesh.quaternion.copy(camera.quaternion); // optional – matches rotation
+    heldMesh.updateMatrixWorld(true);
   }
 
   function animate() {
+    // get animation by frame
     requestAnimationFrame(animate);
 
+    // frame = 1/60 of a second
     const delta = 1 / 60;
 
+    // simulate frame
     physicsWorld.stepSimulation(delta, 10);
 
+    // movement
+    if (keys.w) controls.moveForward(speed);
+    if (keys.s) controls.moveForward(-speed);
+    if (keys.a) controls.moveRight(-speed);
+    if (keys.d) controls.moveRight(speed);
+
+    // animate rigidbodies
     rigidBodies.forEach((mesh) => {
+      // get body
       const body = mesh.userData.physicsBody;
       if (!body || mesh === heldBody) return;
 
+      // change position by motion state
       const motionState = body.getMotionState();
       if (motionState) {
         const transform = new Ammo.btTransform();
@@ -274,14 +376,21 @@ Ammo().then((Ammo) => {
           transform.getOrigin().z(),
         );
       }
+
+      mesh.updateMatrixWorld(true);
     });
 
+    // update held object
     updateHeldObject(delta);
+
+    // check win condition
     checkPuzzleSnaps();
 
+    // render all
     renderer.render(scene, camera);
   }
 
+  // win screen html function
   function triggerWinScreen() {
     const div = document.createElement("div");
     div.innerText = "YOU WIN!";
@@ -297,23 +406,6 @@ Ammo().then((Ammo) => {
     document.body.appendChild(div);
   }
 
-  const onKeyDown = function (event) {
-    switch (event.code) {
-      case "KeyW":
-        controls.moveForward(0.25);
-        break;
-      case "KeyA":
-        controls.moveRight(-0.25);
-        break;
-      case "KeyS":
-        controls.moveForward(-0.25);
-        break;
-      case "KeyD":
-        controls.moveRight(0.25);
-        break;
-    }
-  };
-  document.addEventListener("keydown", onKeyDown, false);
-
+  // intialize all
   init();
 });
