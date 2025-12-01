@@ -20,7 +20,7 @@ Our puzzle was changed from the previous design mentioned in our original DevLog
 
 ### The player is able to exert some control over the simulation in a way that allows them to succeed or fail at the puzzle
 
-The player can pick up objects, with the correct objects being dropped into the right holes being the solution to the puzzle.
+The player can pick up different colored cubes, with the correct cubes being dropped into the right holes being the solution to the puzzle.
 
 ### The game detects success or failure and reports this back to the player using the game's graphics
 

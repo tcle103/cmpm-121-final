@@ -269,7 +269,7 @@ Ammo().then((Ammo) => {
   function attemptPickup() {
     if (heldBody !== null) return; // already holding something
 
-    // taycast from camera
+    // raycast from camera
     const raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
 
@@ -427,3 +427,4 @@ Ammo().then((Ammo) => {
   // intialize all
   init();
 });
+
