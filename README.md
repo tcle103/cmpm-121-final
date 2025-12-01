@@ -34,3 +34,7 @@ Overall, the four main disciplines all need to be associated with the name of sp
 Give us a short section on your outlook on the project. You might cover one or more of these topics:
 
 The plan for the project is to make a 3-dimensional slingshot game (in which the goal is still undecided). We are hoping to learn collaboration and how to better use three.js. We anticipate that the hardest part of the project will likely be learning how to use the libraries that we are unfamiliar with, as well as creating satisfying physics.
+
+## Instructions - How to Operate
+
+The game can be played with simple controls: WASD for movement, with the camera following the player's mouse. Left click to pick up and drop the objects found in the game world. Drop the objects into the right slots and the player will win.
