@@ -427,4 +427,3 @@ Ammo().then((Ammo) => {
   // intialize all
   init();
 });
-
