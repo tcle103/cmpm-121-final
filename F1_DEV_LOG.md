@@ -1,6 +1,6 @@
 # Devlog Entry - 12/1/25
 
-## Requirements
+## How we satisfied the software requirements
 
 ### It is built using a platform (i.e. engine, framework, language) that does not already provide support for 3D rendering and physics simulation
 
