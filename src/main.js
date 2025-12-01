@@ -172,7 +172,7 @@ Ammo().then((Ammo) => {
         if (mesh.userData.shape !== hole.requiredShape) return;
 
         const dist = mesh.position.distanceTo(hole.position);
-        if (dist < 0.7) {
+        if (dist < 0.3) {
           snapToHole(mesh, hole);
         }
       });
@@ -186,6 +186,7 @@ Ammo().then((Ammo) => {
     hole.filled = true;
 
     const body = mesh.userData.physicsBody;
+    mesh.userData.physicsBody = null;
 
     // Disable physics
     physicsWorld.removeRigidBody(body);
