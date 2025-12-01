@@ -129,26 +129,38 @@ Ammo().then((Ammo) => {
 
   // create cubes function
   function createCubes() {
-    // for each cube, create new rigidbodies
-    for (let i = 0; i < 10; i++) {
-      // variables for geometry, mesh, and materials
-      const geo = new THREE.BoxGeometry(1, 1, 1);
-      const mat = new THREE.MeshStandardMaterial({
-        color: Math.random() * 0xffffff,
-      });
-      const mesh = new THREE.Mesh(geo, mat);
-      mesh.position.set(Math.random() * 10 - 5, 3, Math.random() * 10 - 5);
-      scene.add(mesh);
+    const rainbow = [
+        0xFF0000, // red
+        0xFF7F00, // orange
+        0xFFFF00, // yellow
+        0x00FF00, // green
+        0x0000FF, // blue
+        0x8B00FF  // violet
+    ];
 
-      mesh.userData.shape = "cube";
+    for (let i = 0; i < rainbow.length; i++) {
+        const geo = new THREE.BoxGeometry(1, 1, 1);
+        const mat = new THREE.MeshStandardMaterial({ color: rainbow[i] });
+        const mesh = new THREE.Mesh(geo, mat);
 
-      // create rigidbody with the variables
-      createRigidBody(
-        mesh,
-        new Ammo.btBoxShape(new Ammo.btVector3(0.5, 0.5, 0.5)),
-        1,
-      );
-      rigidBodies.push(mesh);
+        mesh.position.set(
+            Math.random() * 8 - 4,
+            3,
+            Math.random() * 8 - 4
+        );
+
+        // store THE COLOR as the "shape" ID
+        mesh.userData.shape = rainbow[i];
+
+        scene.add(mesh);
+
+        createRigidBody(
+            mesh,
+            new Ammo.btBoxShape(new Ammo.btVector3(0.5, 0.5, 0.5)),
+            1
+        );
+
+        rigidBodies.push(mesh);
     }
   }
 
@@ -185,27 +197,33 @@ Ammo().then((Ammo) => {
 
   // create puzzle holes function
   function createPuzzleHoles() {
-    // holes x position
-    const startX = -3;
+    const rainbow = [
+        0xFF0000, // red
+        0xFF7F00, // orange
+        0xFFFF00, // yellow
+        0x00FF00, // green
+        0x0000FF, // blue
+        0x8B00FF  // violet
+    ];
 
-    // for each hole, create visuals
-    for (let i = 0; i < 3; i++) {
-      const x = startX + i * 3;
+    const startX = -9;
 
-      // ring surrounding holes
-      const ringGeo = new THREE.RingGeometry(0.6, 1, 32);
-      const ringMat = new THREE.MeshStandardMaterial({ color: 0xffff00 });
-      const ring = new THREE.Mesh(ringGeo, ringMat);
-      ring.rotation.x = -Math.PI / 2;
-      ring.position.set(x, 0.01, 0);
-      scene.add(ring);
+    for (let i = 0; i < rainbow.length; i++) {
+        const x = startX + i * 3;
 
-      // puzzle slot data
-      puzzleHoles.push({
-        position: new THREE.Vector3(x, 0.5, 0),
-        requiredShape: "cube",
-        filled: false,
-      });
+        // ring visual
+        const ringGeo = new THREE.RingGeometry(0.6, 1, 32);
+        const ringMat = new THREE.MeshStandardMaterial({ color: rainbow[i] });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        ring.rotation.x = -Math.PI / 2;
+        ring.position.set(x, 0.01, 0);
+        scene.add(ring);
+
+        puzzleHoles.push({
+            position: new THREE.Vector3(x, 0.5, 0),
+            requiredShape: rainbow[i],   // MATCH BY COLOR
+            filled: false
+        });
     }
   }
 
