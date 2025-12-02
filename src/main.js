@@ -11,6 +11,9 @@ Ammo().then((AmmoLib) => {
   let rigidBodies = [];
   let puzzleHoles = [];
 
+  //win flag
+  let winTriggered = false;
+
   // Held object variables
   let heldBody = null;
   let heldMesh = null;
@@ -58,6 +61,7 @@ Ammo().then((AmmoLib) => {
     // remove previous "YOU WIN" div if it exists
     const winDiv = document.getElementById("winText");
     if (winDiv) winDiv.remove();
+    winTriggered = false;
 
     // remove old physics bodies
     rigidBodies.forEach(mesh => {
@@ -70,13 +74,14 @@ Ammo().then((AmmoLib) => {
       currentScene = scene;
       rigidBodies = rb;
       puzzleHoles = holes;
+      puzzleHoles.forEach(h => h.filled = false);
       // add camera to scene
       currentScene.add(camera);
     } else {
-      const { scene, rigidBodies: rb } = createScene2(physicsWorld, AmmoLib);
+      const { scene, rigidBodies: rb, puzzleHoles: holes } = createScene2(physicsWorld, AmmoLib);
       currentScene = scene;
       rigidBodies = rb;
-      puzzleHoles = [];
+      puzzleHoles = holes;
       currentScene.add(camera);
     }
   }
@@ -144,27 +149,44 @@ Ammo().then((AmmoLib) => {
   }
 
   function dropObject() {
-    if (!heldBody || !heldMesh) return;
+  if (!heldBody || !heldMesh) return;
 
-    tmpTransform.setIdentity();
-    tmpTransform.setOrigin(new AmmoLib.btVector3(heldMesh.position.x, heldMesh.position.y, heldMesh.position.z));
-    tmpTransform.setRotation(new AmmoLib.btQuaternion(
-      heldMesh.quaternion.x,
-      heldMesh.quaternion.y,
-      heldMesh.quaternion.z,
-      heldMesh.quaternion.w
-    ));
-    heldBody.setWorldTransform(tmpTransform);
-    const motionState = heldBody.getMotionState();
-    if (motionState) motionState.setWorldTransform(tmpTransform);
+  const floorY = 0; // adjust if your floor is higher
+  const dropHeight = Math.max(heldMesh.position.y, floorY + 0.5); // at least 0.5 above floor
 
-    heldBody.setCollisionFlags(0);
-    heldBody.setActivationState(1);
-    heldBody.activate();
+  // Reset physics transform
+  tmpTransform.setIdentity();
+  tmpTransform.setOrigin(new AmmoLib.btVector3(
+    heldMesh.position.x,
+    dropHeight,
+    heldMesh.position.z
+  ));
+  tmpTransform.setRotation(new AmmoLib.btQuaternion(
+    heldMesh.quaternion.x,
+    heldMesh.quaternion.y,
+    heldMesh.quaternion.z,
+    heldMesh.quaternion.w
+  ));
+  heldBody.setWorldTransform(tmpTransform);
 
-    heldBody = null;
-    heldMesh = null;
-  }
+  // Reset motion state
+  const motionState = heldBody.getMotionState();
+  if (motionState) motionState.setWorldTransform(tmpTransform);
+
+  // Re-enable dynamics
+  heldBody.setCollisionFlags(0); // dynamic
+  heldBody.setActivationState(1); // awake
+  heldBody.activate();
+
+  // Reset velocities
+  heldBody.setLinearVelocity(new AmmoLib.btVector3(0, 0, 0));
+  heldBody.setAngularVelocity(new AmmoLib.btVector3(0, 0, 0));
+
+  // Clear held object
+  heldBody = null;
+  heldMesh = null;
+}
+
 
   function updateHeldObject(_delta) {
     if (!heldBody || !heldMesh) return;
@@ -185,23 +207,35 @@ Ammo().then((AmmoLib) => {
   function checkPuzzleSnaps() {
     puzzleHoles.forEach((hole) => {
       if (hole.filled) return;
-      rigidBodies.forEach((mesh) => {
-        if (!mesh.userData.physicsBody) return;
-        if (mesh.userData.shape !== hole.requiredShape) return;
-        const dist = mesh.position.distanceTo(hole.position);
-        if (dist < 0.7) snapToHole(mesh, hole);
-      });
+
+    rigidBodies.forEach((mesh) => {
+      const body = mesh.userData.physicsBody;
+      if (!body) return;
+      if (mesh.userData.shape !== hole.requiredShape) return;
+      if (mesh === heldMesh) return;  
+
+      const dist = mesh.position.distanceTo(hole.position);
+      if (dist < 0.7 && mesh.position.y <= hole.position.y + 0.1) {
+        snapToHole(mesh, hole);
+      }
     });
+  });
+
+  if (!winTriggered && puzzleHoles.every((h) => h.filled)) {
+    winTriggered = true; 
+    triggerWinScreen();
   }
+}
 
   function snapToHole(mesh, hole) {
     hole.filled = true;
     const body = mesh.userData.physicsBody;
+    mesh.userData.physicsBody = null;
     physicsWorld.removeRigidBody(body);
     mesh.position.copy(hole.position);
     mesh.rotation.set(0, 0, 0);
-    // check win
-    if (puzzleHoles.every(h => h.filled)) triggerWinScreen();
+    mesh.updateMatrixWorld(true);
+    mesh.userData.snapped = true;
   }
 
   function triggerWinScreen() {
