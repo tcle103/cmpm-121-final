@@ -259,7 +259,7 @@ Ammo().then((AmmoLib) => {
   function triggerWinScreen() {
     const div = document.createElement("div");
     div.id = "winText"; 
-    div.innerText = "YOU WIN!";
+    div.innerText = "Puzzle Complete!";
     div.style.position = "absolute";
     div.style.top = "40%";
     div.style.left = "50%";
