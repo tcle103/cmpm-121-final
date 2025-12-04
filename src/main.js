@@ -26,6 +26,7 @@ Ammo().then((AmmoLib) => {
   document.addEventListener("keyup", (e) => { if (e.key.toLowerCase() in keys) keys[e.key.toLowerCase()] = false; });
 
   // Initialize systems
+  let currentSceneNumber = 1;
   initPhysics();
   initRenderer();
   initCameraAndControls();
@@ -56,12 +57,17 @@ Ammo().then((AmmoLib) => {
     document.addEventListener("click", () => controls.lock());
   }
 
-  // -------------------
+  // ------------------- Scene Switching
   function switchScene(sceneNumber) {
+    currentSceneNumber = sceneNumber;
     // remove previous "YOU WIN" div if it exists
     const winDiv = document.getElementById("winText");
     if (winDiv) winDiv.remove();
     winTriggered = false;
+
+    renderer.renderLists.dispose();
+
+    if (currentScene) { currentScene.clear(); }
 
     // remove old physics bodies
     rigidBodies.forEach(mesh => {
@@ -85,6 +91,12 @@ Ammo().then((AmmoLib) => {
       currentScene.add(camera);
     }
   }
+
+  function goToNextScene() {
+    switchScene(currentSceneNumber + 1);
+  }
+
+
 
   // -------------------
   function animate() {
@@ -221,9 +233,15 @@ Ammo().then((AmmoLib) => {
     });
   });
 
+
+  // ------ win trigger ------
   if (!winTriggered && puzzleHoles.every((h) => h.filled)) {
     winTriggered = true; 
     triggerWinScreen();
+
+    setTimeout(() => {
+      goToNextScene();
+    }, 1000);
   }
 }
 
