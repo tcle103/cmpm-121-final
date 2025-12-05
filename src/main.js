@@ -3,8 +3,9 @@ import { PointerLockControls } from "three/examples/jsm/controls/PointerLockCont
 import { Ammo } from "@fred3d/ammo";
 import { createScene1 } from "./scene1.js";
 import { createScene2 } from "./scene2.js";
+import { createScene3 } from "./scene3.js";
 
-const inventory = [];
+let inventory = [];
 const puzzleTimeLimit = 60; // seconds
 let puzzleStartTime = 0;
 let failTriggered = false;
@@ -142,8 +143,17 @@ Ammo().then((AmmoLib) => {
       puzzleHoles.forEach((h) => h.filled = false);
       // add camera to scene
       currentScene.add(camera);
-    } else {
+    } else if (sceneNumber === 2) {
       const { scene, rigidBodies: rb, puzzleHoles: holes } = createScene2(
+        physicsWorld,
+        AmmoLib,
+      );
+      currentScene = scene;
+      rigidBodies = rb;
+      puzzleHoles = holes;
+      currentScene.add(camera);
+    } else if (sceneNumber === 3) {
+      const { scene, rigidBodies: rb, puzzleHoles: holes } = createScene3(
         physicsWorld,
         AmmoLib,
       );
@@ -153,6 +163,7 @@ Ammo().then((AmmoLib) => {
       currentScene.add(camera);
     }
     spawnInventoryItems();
+    inventory = [];
   }
 
   function goToNextScene() {
