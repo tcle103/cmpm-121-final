@@ -5,7 +5,7 @@ import { createScene1 } from "./scene1.js";
 import { createScene2 } from "./scene2.js";
 
 const inventory = [];
-let puzzleTimeLimit = 60; // seconds
+const puzzleTimeLimit = 60; // seconds
 let puzzleStartTime = 0;
 let failTriggered = false;
 let spawnedInventoryMeshes = [];
@@ -41,7 +41,7 @@ Ammo().then((AmmoLib) => {
       triggerFailScreen();
     }
   }
-  
+
   function triggerFailScreen() {
     const div = document.createElement("div");
     div.id = "failText";
@@ -61,8 +61,7 @@ Ammo().then((AmmoLib) => {
     setTimeout(() => {
       switchScene(currentSceneNumber);
     }, 3000);
-  } 
-  
+  }
 
   // Key events
   document.addEventListener("keydown", (e) => {
@@ -154,7 +153,6 @@ Ammo().then((AmmoLib) => {
       currentScene.add(camera);
     }
     spawnInventoryItems();
-
   }
 
   function goToNextScene() {
@@ -165,7 +163,7 @@ Ammo().then((AmmoLib) => {
   function animate() {
     requestAnimationFrame(animate);
 
-    updatePuzzleTimer(); 
+    updatePuzzleTimer();
 
     const delta = 1 / 60;
     physicsWorld.stepSimulation(delta, 10);
@@ -206,28 +204,27 @@ Ammo().then((AmmoLib) => {
 
   // -------------------
   function storeHeldObject() {
-      if (!heldMesh || !heldBody) return;
+    if (!heldMesh || !heldBody) return;
 
-      // Save cube info
-      inventory.push({
-        shape: heldMesh.userData.shape,
-        color: heldMesh.material.color.getHex(),
-      });
+    // Save cube info
+    inventory.push({
+      shape: heldMesh.userData.shape,
+      color: heldMesh.material.color.getHex(),
+    });
 
-      // Remove from physics world
-      physicsWorld.removeRigidBody(heldBody);
+    // Remove from physics world
+    physicsWorld.removeRigidBody(heldBody);
 
-      // Remove mesh from scene
-      currentScene.remove(heldMesh);
+    // Remove mesh from scene
+    currentScene.remove(heldMesh);
 
-      heldBody = null;
-      heldMesh = null;
+    heldBody = null;
+    heldMesh = null;
 
-      console.log("Stored inventory:", inventory);
-    }
+    console.log("Stored inventory:", inventory);
+  }
   // PICKUP / DROP
   document.addEventListener("mousedown", () => {
-
     if (heldBody) dropObject();
     else attemptPickup();
   });
@@ -317,11 +314,11 @@ Ammo().then((AmmoLib) => {
   //inventory
   function spawnInventoryItems() {
     // Remove previous spawned inventory
-  spawnedInventoryMeshes.forEach((mesh) => {
-    currentScene.remove(mesh);
-    physicsWorld.removeRigidBody(mesh.userData.physicsBody);
-  });
-  spawnedInventoryMeshes = [];
+    spawnedInventoryMeshes.forEach((mesh) => {
+      currentScene.remove(mesh);
+      physicsWorld.removeRigidBody(mesh.userData.physicsBody);
+    });
+    spawnedInventoryMeshes = [];
 
     inventory.forEach((item, i) => {
       // Spawn cubes in front of the player or a fixed location
@@ -420,8 +417,6 @@ Ammo().then((AmmoLib) => {
     div.style.padding = "20px 40px";
     document.body.appendChild(div);
   }
-
-  
 
   // -------------------
   // Scene switching keys

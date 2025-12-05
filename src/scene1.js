@@ -114,7 +114,7 @@ export function createScene1(physicsWorld, AmmoLib) {
   for (let i = 0; i < rainbow.length; i++) {
     addCube(rainbow[i]);
   }
-  addCube(rainbow[0])
+  addCube(rainbow[0]);
 
   return { scene, rigidBodies, puzzleHoles };
 }
