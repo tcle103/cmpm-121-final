@@ -8,8 +8,12 @@ export function createScene1(physicsWorld, AmmoLib) {
   const puzzleHoles = [];
 
   const rainbow = [
-    0xFF0000, 0xFF7F00, 0xFFFF00,
-    0x00FF00, 0x0000FF, 0x8B00FF
+    0xFF0000,
+    0xFF7F00,
+    0xFFFF00,
+    0x00FF00,
+    0x0000FF,
+    0x8B00FF,
   ];
 
   // Floor
@@ -24,7 +28,12 @@ export function createScene1(physicsWorld, AmmoLib) {
   transform.setIdentity();
   transform.setOrigin(new AmmoLib.btVector3(0, 0, 0));
   const motion = new AmmoLib.btDefaultMotionState(transform);
-  const rbInfo = new AmmoLib.btRigidBodyConstructionInfo(0, motion, shape, new AmmoLib.btVector3(0,0,0));
+  const rbInfo = new AmmoLib.btRigidBodyConstructionInfo(
+    0,
+    motion,
+    shape,
+    new AmmoLib.btVector3(0, 0, 0),
+  );
   const body = new AmmoLib.btRigidBody(rbInfo);
   physicsWorld.addRigidBody(body);
 
@@ -46,7 +55,7 @@ export function createScene1(physicsWorld, AmmoLib) {
     puzzleHoles.push({
       position: new THREE.Vector3(x, 0.5, 0),
       requiredShape: rainbow[i],
-      filled: false
+      filled: false,
     });
   }
 
@@ -55,14 +64,14 @@ export function createScene1(physicsWorld, AmmoLib) {
     let x;
     do {
       x = Math.random() * (end - start) + start;
-    } while (holesX.some(holeX => Math.abs(x - holeX) < 1.2));
+    } while (holesX.some((holeX) => Math.abs(x - holeX) < 1.2));
     return x;
   }
 
-  const holesX = puzzleHoles.map(h => h.position.x);
+  const holesX = puzzleHoles.map((h) => h.position.x);
 
   function addCube(colorKey) {
-    const cubeGeo = new THREE.BoxGeometry(1,1,1);
+    const cubeGeo = new THREE.BoxGeometry(1, 1, 1);
     const cubeMat = new THREE.MeshStandardMaterial({ color: colorKey });
 
     const cube = new THREE.Mesh(cubeGeo, cubeMat);
@@ -74,16 +83,23 @@ export function createScene1(physicsWorld, AmmoLib) {
     cube.userData.shape = colorKey;
     scene.add(cube);
 
-    const shape = new AmmoLib.btBoxShape(new AmmoLib.btVector3(0.5,0.5,0.5));
+    const shape = new AmmoLib.btBoxShape(new AmmoLib.btVector3(0.5, 0.5, 0.5));
     const transform = new AmmoLib.btTransform();
     transform.setIdentity();
-    transform.setOrigin(new AmmoLib.btVector3(cube.position.x, cube.position.y, cube.position.z));
+    transform.setOrigin(
+      new AmmoLib.btVector3(cube.position.x, cube.position.y, cube.position.z),
+    );
 
     const motion = new AmmoLib.btDefaultMotionState(transform);
-    const inertia = new AmmoLib.btVector3(0,0,0);
+    const inertia = new AmmoLib.btVector3(0, 0, 0);
     shape.calculateLocalInertia(1, inertia);
 
-    const rbInfo = new AmmoLib.btRigidBodyConstructionInfo(1, motion, shape, inertia);
+    const rbInfo = new AmmoLib.btRigidBodyConstructionInfo(
+      1,
+      motion,
+      shape,
+      inertia,
+    );
     const body = new AmmoLib.btRigidBody(rbInfo);
 
     physicsWorld.addRigidBody(body);
@@ -94,11 +110,10 @@ export function createScene1(physicsWorld, AmmoLib) {
 
     return cube;
   }
-  
+
   for (let i = 0; i < rainbow.length; i++) {
     addCube(rainbow[i]);
   }
-
 
   return { scene, rigidBodies, puzzleHoles };
 }
