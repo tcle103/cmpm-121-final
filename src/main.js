@@ -4,6 +4,11 @@ import { Ammo } from "@fred3d/ammo";
 import { createScene1 } from "./scene1.js";
 import { createScene2 } from "./scene2.js";
 
+const inventory = [];
+const puzzleTimeLimit = 60; // seconds
+let puzzleStartTime = 0;
+let failTriggered = false;
+let spawnedInventoryMeshes = [];
 Ammo().then((AmmoLib) => {
   let physicsWorld;
   let camera, renderer, controls;
@@ -21,6 +26,43 @@ Ammo().then((AmmoLib) => {
 
   const keys = { w: false, a: false, s: false, d: false };
 
+  // -- FUNCTIONS -- //
+  function startPuzzleTimer() {
+    puzzleStartTime = performance.now();
+    failTriggered = false;
+  }
+
+  function updatePuzzleTimer() {
+    if (winTriggered || failTriggered) return;
+
+    const elapsed = (performance.now() - puzzleStartTime) / 1000; // seconds
+    if (elapsed >= puzzleTimeLimit) {
+      failTriggered = true;
+      triggerFailScreen();
+    }
+  }
+
+  function triggerFailScreen() {
+    const div = document.createElement("div");
+    div.id = "failText";
+    div.innerText = "Time's Up! You Failed!";
+    div.style.position = "absolute";
+    div.style.top = "40%";
+    div.style.left = "50%";
+    div.style.transform = "translate(-50%, -50%)";
+    div.style.fontSize = "60px";
+    div.style.color = "red";
+    div.style.fontFamily = "Arial";
+    div.style.background = "rgba(0,0,0,0.7)";
+    div.style.padding = "20px 40px";
+    document.body.appendChild(div);
+
+    // Optional: Reset scene after 3 seconds
+    setTimeout(() => {
+      switchScene(currentSceneNumber);
+    }, 3000);
+  }
+
   // Key events
   document.addEventListener("keydown", (e) => {
     if (e.key.toLowerCase() in keys) keys[e.key.toLowerCase()] = true;
@@ -35,7 +77,6 @@ Ammo().then((AmmoLib) => {
   initRenderer();
   initCameraAndControls();
   switchScene(1);
-  animate();
 
   // -------------------
   function initPhysics() {
@@ -73,6 +114,7 @@ Ammo().then((AmmoLib) => {
 
   // ------------------- Scene Switching
   function switchScene(sceneNumber) {
+    startPuzzleTimer();
     currentSceneNumber = sceneNumber;
     // remove previous "YOU WIN" div if it exists
     const winDiv = document.getElementById("winText");
@@ -110,6 +152,7 @@ Ammo().then((AmmoLib) => {
       puzzleHoles = holes;
       currentScene.add(camera);
     }
+    spawnInventoryItems();
   }
 
   function goToNextScene() {
@@ -119,6 +162,8 @@ Ammo().then((AmmoLib) => {
   // -------------------
   function animate() {
     requestAnimationFrame(animate);
+
+    updatePuzzleTimer();
 
     const delta = 1 / 60;
     physicsWorld.stepSimulation(delta, 10);
@@ -158,10 +203,34 @@ Ammo().then((AmmoLib) => {
   }
 
   // -------------------
+  function storeHeldObject() {
+    if (!heldMesh || !heldBody) return;
+
+    // Save cube info
+    inventory.push({
+      shape: heldMesh.userData.shape,
+      color: heldMesh.material.color.getHex(),
+    });
+
+    // Remove from physics world
+    physicsWorld.removeRigidBody(heldBody);
+
+    // Remove mesh from scene
+    currentScene.remove(heldMesh);
+
+    heldBody = null;
+    heldMesh = null;
+
+    console.log("Stored inventory:", inventory);
+  }
   // PICKUP / DROP
   document.addEventListener("mousedown", () => {
     if (heldBody) dropObject();
     else attemptPickup();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "e" || e.key === "E") storeHeldObject();
   });
 
   function attemptPickup() {
@@ -242,6 +311,55 @@ Ammo().then((AmmoLib) => {
     heldMesh.quaternion.copy(camera.quaternion);
     heldMesh.updateMatrixWorld(true);
   }
+  //inventory
+  function spawnInventoryItems() {
+    // Remove previous spawned inventory
+    spawnedInventoryMeshes.forEach((mesh) => {
+      currentScene.remove(mesh);
+      physicsWorld.removeRigidBody(mesh.userData.physicsBody);
+    });
+    spawnedInventoryMeshes = [];
+
+    inventory.forEach((item, i) => {
+      // Spawn cubes in front of the player or a fixed location
+      const cubeGeo = new THREE.BoxGeometry(1, 1, 1);
+      const cubeMat = new THREE.MeshStandardMaterial({ color: item.color });
+      const cube = new THREE.Mesh(cubeGeo, cubeMat);
+
+      cube.position.set(0 + i * 2, 3, 0); // spread them out
+      cube.userData.shape = item.shape;
+
+      currentScene.add(cube);
+
+      // Physics body:
+      const shape = new AmmoLib.btBoxShape(
+        new AmmoLib.btVector3(0.5, 0.5, 0.5),
+      );
+      const transform = new AmmoLib.btTransform();
+      transform.setIdentity();
+      transform.setOrigin(
+        new AmmoLib.btVector3(
+          cube.position.x,
+          cube.position.y,
+          cube.position.z,
+        ),
+      );
+      const motion = new AmmoLib.btDefaultMotionState(transform);
+      const localInertia = new AmmoLib.btVector3(0, 0, 0);
+      shape.calculateLocalInertia(1, localInertia);
+      const rbInfo = new AmmoLib.btRigidBodyConstructionInfo(
+        1,
+        motion,
+        shape,
+        localInertia,
+      );
+      const body = new AmmoLib.btRigidBody(rbInfo);
+
+      cube.userData.physicsBody = body;
+      rigidBodies.push(cube);
+      physicsWorld.addRigidBody(body);
+    });
+  }
 
   // -------------------
   // PUZZLE SNAP
@@ -306,4 +424,5 @@ Ammo().then((AmmoLib) => {
     if (e.key === "1") switchScene(1);
     if (e.key === "2") switchScene(2);
   });
+  animate();
 });
