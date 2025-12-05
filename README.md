@@ -37,4 +37,4 @@ The plan for the project is to make a 3-dimensional slingshot game (in which the
 
 ## Instructions - How to Operate
 
-The game can be played with simple controls: WASD for movement, with the camera following the player's mouse. Left click to pick up and drop the objects found in the game world. Drop the objects into the right slots and the player will win.
+The game can be played with simple controls: WASD for movement, with the camera following the player's mouse. Left click to pick up and drop the objects found in the game world. Drop the objects into the right slots and the player will win. Press "e" to keep blocks for later levels.
