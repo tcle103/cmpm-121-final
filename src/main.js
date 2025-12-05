@@ -22,10 +22,15 @@ Ammo().then((AmmoLib) => {
   const keys = { w: false, a: false, s: false, d: false };
 
   // Key events
-  document.addEventListener("keydown", (e) => { if (e.key.toLowerCase() in keys) keys[e.key.toLowerCase()] = true; });
-  document.addEventListener("keyup", (e) => { if (e.key.toLowerCase() in keys) keys[e.key.toLowerCase()] = false; });
+  document.addEventListener("keydown", (e) => {
+    if (e.key.toLowerCase() in keys) keys[e.key.toLowerCase()] = true;
+  });
+  document.addEventListener("keyup", (e) => {
+    if (e.key.toLowerCase() in keys) keys[e.key.toLowerCase()] = false;
+  });
 
   // Initialize systems
+  let currentSceneNumber = 1;
   initPhysics();
   initRenderer();
   initCameraAndControls();
@@ -38,7 +43,12 @@ Ammo().then((AmmoLib) => {
     const dispatcher = new AmmoLib.btCollisionDispatcher(config);
     const broadphase = new AmmoLib.btDbvtBroadphase();
     const solver = new AmmoLib.btSequentialImpulseConstraintSolver();
-    physicsWorld = new AmmoLib.btDiscreteDynamicsWorld(dispatcher, broadphase, solver, config);
+    physicsWorld = new AmmoLib.btDiscreteDynamicsWorld(
+      dispatcher,
+      broadphase,
+      solver,
+      config,
+    );
     physicsWorld.setGravity(new AmmoLib.btVector3(0, -9.82, 0));
   }
 
@@ -49,41 +59,61 @@ Ammo().then((AmmoLib) => {
   }
 
   function initCameraAndControls() {
-    camera = new THREE.PerspectiveCamera(75, globalThis.innerWidth / globalThis.innerHeight, 0.1, 1000);
+    camera = new THREE.PerspectiveCamera(
+      75,
+      globalThis.innerWidth / globalThis.innerHeight,
+      0.1,
+      1000,
+    );
     camera.position.set(0, 1.8, 5);
 
     controls = new PointerLockControls(camera, document.body);
     document.addEventListener("click", () => controls.lock());
   }
 
-  // -------------------
+  // ------------------- Scene Switching
   function switchScene(sceneNumber) {
+    currentSceneNumber = sceneNumber;
     // remove previous "YOU WIN" div if it exists
     const winDiv = document.getElementById("winText");
     if (winDiv) winDiv.remove();
     winTriggered = false;
 
+    renderer.renderLists.dispose();
+
+    if (currentScene) currentScene.clear();
+
     // remove old physics bodies
-    rigidBodies.forEach(mesh => {
+    rigidBodies.forEach((mesh) => {
       const body = mesh.userData.physicsBody;
       if (body) physicsWorld.removeRigidBody(body);
     });
 
     if (sceneNumber === 1) {
-      const { scene, rigidBodies: rb, puzzleHoles: holes } = createScene1(physicsWorld, AmmoLib);
+      const { scene, rigidBodies: rb, puzzleHoles: holes } = createScene1(
+        physicsWorld,
+        AmmoLib,
+      );
       currentScene = scene;
       rigidBodies = rb;
       puzzleHoles = holes;
-      puzzleHoles.forEach(h => h.filled = false);
+      puzzleHoles.forEach((h) => h.filled = false);
       // add camera to scene
       currentScene.add(camera);
     } else {
-      const { scene, rigidBodies: rb, puzzleHoles: holes } = createScene2(physicsWorld, AmmoLib);
+      const { scene, rigidBodies: rb, puzzleHoles: holes } = createScene2(
+        physicsWorld,
+        AmmoLib,
+      );
       currentScene = scene;
       rigidBodies = rb;
       puzzleHoles = holes;
       currentScene.add(camera);
     }
+  }
+
+  function goToNextScene() {
+    switchScene(currentSceneNumber + 1);
   }
 
   // -------------------
@@ -100,19 +130,23 @@ Ammo().then((AmmoLib) => {
     if (keys.d) controls.moveRight(0.05);
 
     // Update rigid bodies
-    rigidBodies.forEach(mesh => {
+    rigidBodies.forEach((mesh) => {
       const body = mesh.userData.physicsBody;
       if (!body || mesh === heldMesh) return;
       const motionState = body.getMotionState();
       if (motionState) {
         const transform = new AmmoLib.btTransform();
         motionState.getWorldTransform(transform);
-        mesh.position.set(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z());
+        mesh.position.set(
+          transform.getOrigin().x(),
+          transform.getOrigin().y(),
+          transform.getOrigin().z(),
+        );
         mesh.quaternion.set(
           transform.getRotation().x(),
           transform.getRotation().y(),
           transform.getRotation().z(),
-          transform.getRotation().w()
+          transform.getRotation().w(),
         );
       }
     });
@@ -149,51 +183,58 @@ Ammo().then((AmmoLib) => {
   }
 
   function dropObject() {
-  if (!heldBody || !heldMesh) return;
+    if (!heldBody || !heldMesh) return;
 
-  const floorY = 0; // adjust if your floor is higher
-  const dropHeight = Math.max(heldMesh.position.y, floorY + 0.5); // at least 0.5 above floor
+    const floorY = 0; // adjust if your floor is higher
+    const dropHeight = Math.max(heldMesh.position.y, floorY + 0.5); // at least 0.5 above floor
 
-  // Reset physics transform
-  tmpTransform.setIdentity();
-  tmpTransform.setOrigin(new AmmoLib.btVector3(
-    heldMesh.position.x,
-    dropHeight,
-    heldMesh.position.z
-  ));
-  tmpTransform.setRotation(new AmmoLib.btQuaternion(
-    heldMesh.quaternion.x,
-    heldMesh.quaternion.y,
-    heldMesh.quaternion.z,
-    heldMesh.quaternion.w
-  ));
-  heldBody.setWorldTransform(tmpTransform);
+    // Reset physics transform
+    tmpTransform.setIdentity();
+    tmpTransform.setOrigin(
+      new AmmoLib.btVector3(
+        heldMesh.position.x,
+        dropHeight,
+        heldMesh.position.z,
+      ),
+    );
+    tmpTransform.setRotation(
+      new AmmoLib.btQuaternion(
+        heldMesh.quaternion.x,
+        heldMesh.quaternion.y,
+        heldMesh.quaternion.z,
+        heldMesh.quaternion.w,
+      ),
+    );
+    heldBody.setWorldTransform(tmpTransform);
 
-  // Reset motion state
-  const motionState = heldBody.getMotionState();
-  if (motionState) motionState.setWorldTransform(tmpTransform);
+    // Reset motion state
+    const motionState = heldBody.getMotionState();
+    if (motionState) motionState.setWorldTransform(tmpTransform);
 
-  // Re-enable dynamics
-  heldBody.setCollisionFlags(0); // dynamic
-  heldBody.setActivationState(1); // awake
-  heldBody.activate();
+    // Re-enable dynamics
+    heldBody.setCollisionFlags(0); // dynamic
+    heldBody.setActivationState(1); // awake
+    heldBody.activate();
 
-  // Reset velocities
-  heldBody.setLinearVelocity(new AmmoLib.btVector3(0, 0, 0));
-  heldBody.setAngularVelocity(new AmmoLib.btVector3(0, 0, 0));
+    // Reset velocities
+    heldBody.setLinearVelocity(new AmmoLib.btVector3(0, 0, 0));
+    heldBody.setAngularVelocity(new AmmoLib.btVector3(0, 0, 0));
 
-  // Clear held object
-  heldBody = null;
-  heldMesh = null;
-}
-
+    // Clear held object
+    heldBody = null;
+    heldMesh = null;
+  }
 
   function updateHeldObject(_delta) {
     if (!heldBody || !heldMesh) return;
 
-    const targetPos = camera.position.clone().add(camera.getWorldDirection(new THREE.Vector3()).multiplyScalar(2));
+    const targetPos = camera.position.clone().add(
+      camera.getWorldDirection(new THREE.Vector3()).multiplyScalar(2),
+    );
     tmpTransform.setIdentity();
-    tmpTransform.setOrigin(new AmmoLib.btVector3(targetPos.x, targetPos.y, targetPos.z));
+    tmpTransform.setOrigin(
+      new AmmoLib.btVector3(targetPos.x, targetPos.y, targetPos.z),
+    );
     heldBody.setWorldTransform(tmpTransform);
     heldBody.activate();
 
@@ -208,24 +249,29 @@ Ammo().then((AmmoLib) => {
     puzzleHoles.forEach((hole) => {
       if (hole.filled) return;
 
-    rigidBodies.forEach((mesh) => {
-      const body = mesh.userData.physicsBody;
-      if (!body) return;
-      if (mesh.userData.shape !== hole.requiredShape) return;
-      if (mesh === heldMesh) return;  
+      rigidBodies.forEach((mesh) => {
+        const body = mesh.userData.physicsBody;
+        if (!body) return;
+        if (mesh.userData.shape !== hole.requiredShape) return;
+        if (mesh === heldMesh) return;
 
-      const dist = mesh.position.distanceTo(hole.position);
-      if (dist < 0.7 && mesh.position.y <= hole.position.y + 0.1) {
-        snapToHole(mesh, hole);
-      }
+        const dist = mesh.position.distanceTo(hole.position);
+        if (dist < 0.7 && mesh.position.y <= hole.position.y + 0.1) {
+          snapToHole(mesh, hole);
+        }
+      });
     });
-  });
 
-  if (!winTriggered && puzzleHoles.every((h) => h.filled)) {
-    winTriggered = true; 
-    triggerWinScreen();
+    // ------ win trigger ------
+    if (!winTriggered && puzzleHoles.every((h) => h.filled)) {
+      winTriggered = true;
+      triggerWinScreen();
+
+      setTimeout(() => {
+        goToNextScene();
+      }, 1000);
+    }
   }
-}
 
   function snapToHole(mesh, hole) {
     hole.filled = true;
@@ -240,8 +286,8 @@ Ammo().then((AmmoLib) => {
 
   function triggerWinScreen() {
     const div = document.createElement("div");
-    div.id = "winText"; 
-    div.innerText = "YOU WIN!";
+    div.id = "winText";
+    div.innerText = "Puzzle Complete!";
     div.style.position = "absolute";
     div.style.top = "40%";
     div.style.left = "50%";
